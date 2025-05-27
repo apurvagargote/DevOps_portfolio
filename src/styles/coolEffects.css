@@ -1,0 +1,179 @@
+/* Modern vibrant color palette */
+:root {
+  --vibrant-purple: #8A2BE2;
+  --vibrant-pink: #FF1493;
+  --vibrant-blue: #00BFFF;
+  --vibrant-teal: #00CED1;
+  --vibrant-green: #00FA9A;
+  --vibrant-yellow: #FFD700;
+  --vibrant-orange: #FF8C00;
+}
+
+/* Enhanced gradient text effect */
+.gradient-text {
+  background: linear-gradient(90deg, var(--vibrant-blue), var(--vibrant-purple), var(--vibrant-pink));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: gradient-shift 8s ease infinite;
+  background-size: 300% 300%;
+  position: relative;
+}
+
+.gradient-text::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, var(--vibrant-blue), var(--vibrant-purple), var(--vibrant-pink));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  filter: blur(8px);
+  opacity: 0.7;
+}
+
+/* Advanced button effects */
+.cta-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 1;
+}
+
+.cta-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, var(--vibrant-purple), var(--vibrant-blue));
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+}
+
+.cta-button:hover {
+  transform: translateY(-5px) scale(1.03);
+  color: white !important;
+}
+
+.cta-button:hover::before {
+  opacity: 1;
+}
+
+/* Enhanced glow effect */
+.glow-button {
+  box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.glow-button:hover {
+  box-shadow: 0 0 30px var(--vibrant-purple), 0 0 60px rgba(180, 123, 234, 0.4);
+  background: linear-gradient(45deg, var(--vibrant-purple), var(--vibrant-blue)) !important;
+  border-color: var(--vibrant-blue) !important;
+}
+
+/* Advanced card hover effects */
+.project-card {
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-radius: 16px !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, var(--vibrant-blue), var(--vibrant-purple), var(--vibrant-pink));
+  transform: scaleX(0);
+  transition: transform 0.5s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-15px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2) !important;
+}
+
+.project-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* Enhanced nav link hover effects */
+.navbar-nav .nav-link {
+  position: relative;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.navbar-nav .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--vibrant-blue), var(--vibrant-purple));
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--vibrant-purple) !important;
+  transform: translateY(-2px);
+}
+
+.navbar-nav .nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Dark mode enhancements */
+[data-theme='dark'] .gradient-text {
+  background: linear-gradient(90deg, var(--vibrant-teal), var(--vibrant-blue), var(--vibrant-purple));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
+}
+
+[data-theme='dark'] .glow-button:hover {
+  box-shadow: 0 0 30px var(--vibrant-blue), 0 0 60px rgba(0, 191, 255, 0.4);
+  background: linear-gradient(45deg, var(--vibrant-blue), var(--vibrant-teal)) !important;
+  border-color: var(--vibrant-teal) !important;
+}
+
+[data-theme='dark'] .navbar-nav .nav-link:hover {
+  color: var(--vibrant-blue) !important;
+}
+
+[data-theme='dark'] .navbar-nav .nav-link::after {
+  background: linear-gradient(90deg, var(--vibrant-teal), var(--vibrant-blue));
+}
+
+[data-theme='dark'] .project-card::before {
+  background: linear-gradient(90deg, var(--vibrant-teal), var(--vibrant-blue), var(--vibrant-purple));
+}
+/* Add this to your coolEffects.css file */
+@keyframes textFocus {
+  0% {
+    letter-spacing: -0.5em;
+    filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    filter: blur(0px);
+    opacity: 1;
+  }
+}
+
+.text-focus-in {
+  animation: textFocus 1.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+}

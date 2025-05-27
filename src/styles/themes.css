@@ -1,69 +1,370 @@
 :root {
+  /* Pale Theme Colors */
+  --pale-lavender: #D8BFD8;
+  --pale-pink: #FFD1DC;
+  --pale-peach: #FFDAB9;
+  --pale-mint: #C7EACC;
+  --pale-yellow: #FFFACD;
+  --pale-coral: #F8B195;
+  --pale-mauve: #C9A0DC;
+
+  /* Light Theme Defaults */
   --bg-primary: #ffffff;
   --bg-secondary: #f8f9fa;
   --text-primary: #212529;
   --text-secondary: #6c757d;
-  --accent-color: #0d6efd;
+  --accent-color: #C9A0DC;
   --border-color: #dee2e6;
   --card-bg: #ffffff;
   --card-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-  --navbar-bg: #343a40;
-  --navbar-text: #ffffff;
+  --navbar-bg: #f8f9fa;
+  --navbar-text: #212529;
+  --hero-bg: linear-gradient(135deg, #FFD1DC, #FFDAB9, #D8BFD8);
+  --hero-text: #212529;
   --transition-speed: 0.3s;
 }
 
 [data-theme='dark'] {
   --bg-primary: #121212;
   --bg-secondary: #1e1e1e;
-  --text-primary: #f8f9fa;
-  --text-secondary: #adb5bd;
-  --accent-color: #3d8bfd;
-  --border-color: #495057;
-  --card-bg: #2d2d2d;
-  --card-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
-  --navbar-bg: #212529;
-  --navbar-text: #ffffff;
+  --text-primary: #e0e0e0;
+  --text-secondary: #aaaaaa;
+  --accent-color: #C9A0DC;
+  --border-color: #333333;
+  --card-bg: #141414;
+  --card-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.6);
+  --navbar-bg: #121212;
+  --navbar-text: #e0e0e0;
+  --hero-bg: linear-gradient(135deg, #2a2a2a, #121212, #1a1a1a);
+  --hero-text: #e0e0e0;
 }
 
-body {
+body, main, .App {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   transition: background-color var(--transition-speed), color var(--transition-speed);
+  min-height: 100vh;
 }
 
-.card {
-  background-color: var(--card-bg);
-  border-color: var(--border-color);
-  box-shadow: var(--card-shadow);
-  transition: background-color var(--transition-speed), border-color var(--transition-speed);
-}
-
-.bg-dark {
-  background-color: var(--navbar-bg) !important;
-}
-
-.text-white {
-  color: var(--navbar-text) !important;
-}
-
-.btn-primary {
-  background-color: var(--accent-color);
-  border-color: var(--accent-color);
-}
-
-.btn-outline-light {
+p, h1, h2, h3, h4, h5, h6, .section-title {
   color: var(--text-primary);
-  border-color: var(--border-color);
-}
-
-[data-theme='dark'] .btn-outline-light {
-  color: var(--text-secondary);
-}
-
-.section-title {
-  color: var(--text-primary);
+  margin-top: 50px;
 }
 
 .text-muted {
   color: var(--text-secondary) !important;
+}
+
+.navbar-dark,
+.bg-dark {
+  background-color: var(--navbar-bg) !important;
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .navbar-nav .nav-link,
+.text-white {
+  color: var(--navbar-text) !important;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+  color: var(--accent-color) !important;
+}
+
+/* Cards */
+.card {
+  background-color: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--card-shadow) !important;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed);
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--accent-color) !important;
+  border-color: var(--accent-color) !important;
+  color: #fff !important;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed), opacity var(--transition-speed);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  opacity: 0.85;
+  color: #fff !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.btn-outline-light {
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+  transition: color var(--transition-speed), border-color var(--transition-speed);
+}
+
+.btn-outline-light:hover,
+.btn-outline-light:focus {
+  color: var(--accent-color) !important;
+  border-color: var(--accent-color) !important;
+  background-color: transparent !important;
+}
+
+/* Hero Section */
+.hero-section {
+  background: var(--hero-bg) !important;
+  color: var(--hero-text) !important;
+}
+
+.hero-section h1,
+.hero-section p {
+  color: var(--hero-text) !important;
+}
+
+/* Universal link and button hover */
+a,
+a:focus,
+a:active,
+a:hover,
+button:focus,
+button:active,
+button:hover,
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link:focus,
+.navbar-nav .nav-link:active {
+  color: var(--accent-color) !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+  text-decoration: none !important;
+  transition: color var(--transition-speed);
+}
+
+button,
+a,
+.navbar-nav .nav-link {
+  transition: color var(--transition-speed);
+}
+
+/* Typography overrides for dark theme */
+[data-theme='dark'] p,
+[data-theme='dark'] h1, 
+[data-theme='dark'] h2, 
+[data-theme='dark'] h3, 
+[data-theme='dark'] h4,
+[data-theme='dark'] h5,
+[data-theme='dark'] h6,
+[data-theme='dark'] .section-title,
+[data-theme='dark'] .text-muted {
+  color: var(--text-primary) !important;
+}
+
+/* Form controls in dark theme */
+[data-theme='dark'] .form-control {
+  background-color: #2a2a2a !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme='dark'] .form-control:focus {
+  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25) !important;
+}
+
+[data-theme='dark'] label {
+  color: var(--text-primary) !important;
+}
+
+[data-theme='dark'] .form-text {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme='dark'] .list-group-item {
+  background-color: #1a1a1a !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme='dark'] .resume-item {
+  border-color: var(--border-color) !important;
+}
+
+[data-theme='dark'] .resume-item h4,
+[data-theme='dark'] .resume-item h5 {
+  color: var(--text-primary) !important;
+  background: none;
+  text-shadow: none;
+}
+
+[data-theme='dark'] .resume-item .resume-date {
+  color: var(--accent-color) !important;
+}
+
+[data-theme='dark'] .contact-info-item {
+  color: var(--text-primary) !important;
+}
+
+[data-theme='dark'] .contact-info-item i {
+  color: var(--accent-color) !important;
+}
+
+[data-theme='dark'] a {
+  color: var(--accent-color) !important;
+}
+
+[data-theme='dark'] a:hover {
+  color: #2673d4 !important;
+}
+
+/* Button resets */
+.cta-button,
+.btn-outline-dark,
+.btn-outline-light {
+  all: unset;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* Fix Contact Me button style */
+[data-theme='dark'] .hero-section .btn-primary,
+[data-theme='dark'] .hero-section .btn-primary:hover,
+[data-theme='dark'] .hero-section .btn-primary:focus {
+  color: #ffffff !important;
+  background-color: var(--accent-color) !important;
+  border-color: var(--accent-color) !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+}
+
+/* 🌙 Dark Theme Button Hover with white border and blended background */
+[data-theme='dark'] button:hover,
+[data-theme='dark'] .btn:hover,
+[data-theme='dark'] .btn:focus,
+[data-theme='dark'] .btn-primary:hover,
+[data-theme='dark'] .btn-outline-light:hover,
+[data-theme='dark'] .btn-outline-dark:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid #ffffff !important;
+  color: #ffffff !important;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
+}
+
+[data-theme='dark'] .btn:active,
+[data-theme='dark'] .btn:focus {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid #ffffff !important;
+  color: #ffffff !important;
+}
+
+/* Base buttons in dark */
+[data-theme='dark'] .btn,
+[data-theme='dark'] button {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
+}
+
+/* === NEW ADDED STYLES for btn-primary.cta-button.glow-button on dark theme === */
+[data-theme='dark'] .btn-primary.cta-button.glow-button {
+  background-color: transparent !important;
+  border: 2px solid var(--accent-color) !important;
+  color: #fff !important;
+  box-shadow: 0 0 8px var(--accent-color);
+  transition: background-color var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed), color var(--transition-speed);
+}
+
+[data-theme='dark'] .btn-primary.cta-button.glow-button:hover,
+[data-theme='dark'] .btn-primary.cta-button.glow-button:focus {
+  background-color: rgba(201, 160, 220, 0.25) !important; /* translucent pale mauve */
+  border-color: #ffffff !important;  /* white border */
+  box-shadow: 0 0 5px #ffffff !important; /* white glow */
+  color: #ffffff !important;
+  outline: none !important;
+  opacity: 1 !important;
+}
+/* General button styling - Purple background initially */
+.btn-outline-light,
+.btn-outline-dark,
+.btn-primary {
+  background-color: #C9A0DC !important;
+  color: #ffffff !important;
+  border: 2px solid #C9A0DC !important;
+  font-weight: 500;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect: white background, purple text and border */
+.btn-outline-light:hover,
+.btn-outline-dark:hover,
+.btn-primary:hover {
+  background-color: #ffffff !important;
+  color: #C9A0DC !important;
+  border-color: #C9A0DC !important;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(201, 160, 220, 0.3);
+}
+
+/* Hero section buttons */
+.hero-section .btn-primary {
+  background-color: #C9A0DC !important;
+  color: #ffffff !important;
+  border: 2px solid #C9A0DC !important;
+}
+
+.hero-section .btn-primary:hover {
+  background-color: #ffffff !important;
+  color: #C9A0DC !important;
+  border-color: #C9A0DC !important;
+}
+
+/* Outline buttons in hero section (transparent base) */
+.hero-section .btn-outline-light,
+.hero-section .btn-outline-dark {
+  background-color: transparent !important;
+  color: #212529 !important;
+  border: 2px solid #C9A0DC !important;
+}
+
+/* Hover: white background and purple text */
+.hero-section .btn-outline-light:hover,
+.hero-section .btn-outline-dark:hover {
+  background-color: #ffffff !important;
+  color: #C9A0DC !important;
+  border-color: #C9A0DC !important;
+}
+
+/* Contact form submit button */
+.contact-form .btn-primary {
+  background-color: #C9A0DC !important;
+  color: #ffffff !important;
+  border: 2px solid #C9A0DC !important;
+  width: 100%;
+  padding: 0.75rem;
+}
+
+.contact-form .btn-primary:hover {
+  background-color: #ffffff !important;
+  color: #C9A0DC !important;
+  border-color: #C9A0DC !important;
+}
+
+/* Resume download button */
+.resume-download-btn {
+  background-color: #C9A0DC !important;
+  color: #ffffff !important;
+  border: 2px solid #C9A0DC !important;
+  padding: 0.75rem 1.5rem;
+}
+
+.resume-download-btn:hover {
+  background-color: #ffffff !important;
+  color: #C9A0DC !important;
+  border-color: #C9A0DC !important;
+}
+/* Make GitHub text white in dark theme */
+[data-theme='dark'] .project-card .btn {
+  color: #000000 !important;
+  background-color: white !important;
 }
