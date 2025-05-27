@@ -368,3 +368,56 @@ a,
   color: #000000 !important;
   background-color: white !important;
 }
+/* Fix download resume button text color in dark theme */
+[data-theme='dark'] .resume-download-btn {
+  color: #ffffff !important;
+}
+
+[data-theme='dark'] .resume-download-btn:hover {
+  color: #C9A0DC !important;
+}
+/* Fix footer text visibility in light theme */
+footer.bg-dark p {
+  color: #ffffff !important;
+}
+
+footer.bg-dark a {
+  color: #ffffff !important;
+}
+
+footer.bg-dark a:hover {
+  color: #C9A0DC !important;
+}
+/* Fix download button after click */
+.resume-download-btn,
+.resume-download-btn:visited,
+.resume-download-btn:active,
+.resume-download-btn:focus {
+  background-color: #C9A0DC !important;
+  color: #ffffff !important;
+  border: 2px solid #C9A0DC !important;
+
+}
+
+/* Dark theme specific fixes */
+[data-theme='dark'] .resume-download-btn,
+[data-theme='dark'] .resume-download-btn:visited,
+[data-theme='dark'] .resume-download-btn:active,
+[data-theme='dark'] .resume-download-btn:focus {
+  background-color: #C9A0DC !important;
+  color: #ffffff !important;
+  border: 2px solid #C9A0DC !important;
+}
+
+/* Preserve hover styles */
+.resume-download-btn:hover {
+  background-color: #ffffff !important;
+  color: #C9A0DC !important;
+  border-color: #C9A0DC !important;
+}
+
+[data-theme='dark'] .resume-download-btn:hover {
+  background-color: #ffffff !important;
+  color: #C9A0DC !important;
+  border-color: #C9A0DC !important;
+}

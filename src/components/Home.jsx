@@ -7,6 +7,10 @@ import { FaJenkins, FaDocker, FaAws } from 'react-icons/fa';
 import { SiTerraform, SiKubernetes } from 'react-icons/si';
 import profilePhoto from '../assets/profile-photo.jpg'; // Add your photo to assets folder
 
+
+const PurpleSpan = styled.span`
+  color: #ac81c0;
+`;
 const HeroSection = styled.div`
   padding: 120px 0;
   transition: background 0.3s ease, color 0.3s ease;
@@ -42,28 +46,28 @@ const SkillIconContainer = styled.div`
 
 const Home = () => {
   const { isDarkMode } = useContext(ThemeContext);
-  
+
   useEffect(() => {
     // Reveal animation on scroll
     const revealElements = document.querySelectorAll('.reveal');
-    
+
     const revealOnScroll = () => {
       revealElements.forEach(element => {
         const elementTop = element.getBoundingClientRect().top;
         const windowHeight = window.innerHeight;
-        
+
         if (elementTop < windowHeight - 100) {
           element.classList.add('active');
         }
       });
     };
-    
+
     window.addEventListener('scroll', revealOnScroll);
     revealOnScroll(); // Initial check
-    
+
     return () => window.removeEventListener('scroll', revealOnScroll);
   }, []);
-  
+
   return (
     <>
       <HeroSection className="hero-section">
@@ -73,10 +77,11 @@ const Home = () => {
               <ProfileImage src={profilePhoto} alt="Profile" fluid />
             </Col>
             <Col lg={8} className="text-center text-lg-start">
-              <h1 className="display-4 fw-bold mb-4 gradient-text text-focus-in">DevOps Engineer Portfolio</h1>
+              <h1 className="display-4 fw-bold mb-4 gradient-text text-focus-in"> Hey there, I'm
+                <PurpleSpan> Apurva Gargote 👋</PurpleSpan></h1>
               <p className="lead mb-5 typing-animation">
-                Specializing in CI/CD pipelines, infrastructure as code, and cloud architecture.
-                Building scalable, reliable, and automated infrastructure solutions.
+                I'm a passionate DevOps enthusiast and aspiring Cloud Engineer with hands-on experience in building and deploying full-stack applications using tools like Docker, Jenkins, AWS, and Kubernetes.
+                <p>Let's build something awesome together! 🚀</p>
               </p>
               <div>
                 <Button as={Link} to="/contact" variant="primary" size="lg" className="cta-button glow-button me-3">
@@ -96,8 +101,7 @@ const Home = () => {
           <Col lg={8} className="mx-auto text-center">
             <h2 className="section-title reveal">What I Do</h2>
             <p className="lead mb-5 reveal">
-              I design and implement DevOps solutions that bridge development and operations,
-              enabling teams to deliver software faster and more reliably.
+              I’m learning to design and implement DevOps solutions that help bridge development and operations, aiming to make software delivery faster and more reliable.
             </p>
           </Col>
         </Row>

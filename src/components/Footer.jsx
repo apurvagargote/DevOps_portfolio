@@ -11,10 +11,10 @@ const Footer = () => {
             <p>&copy; {new Date().getFullYear()} DevOps Portfolio</p>
           </Col>
           <Col md={6} className="text-center text-md-end">
-            <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" className="text-white me-3">
+            <a href="https://github.com/apurvagargote" target="_blank" rel="noopener noreferrer" className="text-white me-3">
               <FaGithub size={24} />
             </a>
-            <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer" className="text-white">
+            <a href="https://linkedin.com/in/apurvagargote" target="_blank" rel="noopener noreferrer" className="text-white">
               <FaLinkedin size={24} />
             </a>
           </Col>

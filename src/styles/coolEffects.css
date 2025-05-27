@@ -162,18 +162,3 @@
   background: linear-gradient(90deg, var(--vibrant-teal), var(--vibrant-blue), var(--vibrant-purple));
 }
 /* Add this to your coolEffects.css file */
-@keyframes textFocus {
-  0% {
-    letter-spacing: -0.5em;
-    filter: blur(12px);
-    opacity: 0;
-  }
-  100% {
-    filter: blur(0px);
-    opacity: 1;
-  }
-}
-
-.text-focus-in {
-  animation: textFocus 1.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
-}
