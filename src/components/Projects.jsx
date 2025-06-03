@@ -1,44 +1,36 @@
 import React from 'react';
 import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import profilePhoto from '../assets/profile-photo.jpg';
 
 const Projects = () => {
   const projects = [
     {
-      title: "Kubernetes Microservices Platform",
-      description: "Designed and implemented a complete microservices platform using Kubernetes, Istio, and ArgoCD for continuous deployment.",
+      title: "Cloud-Native Resource Monitoring App",
+      description: " Built a real-time system metrics dashboard using Flask and psutil.",
       image: "project1.jpg",
-      tags: ["Kubernetes", "Istio", "ArgoCD", "Microservices"],
-      github: "https://github.com/yourusername/k8s-microservices-platform",
+      tags: ["Kubernetes", "Flask", "Python", "Containerd"],
+      github: "https://github.com/apurvagargote/Cloud-native-monitoring-app",
       demo: "https://architecture-diagram-url.com",
-      outcomes: "Reduced deployment time by 80% and improved system reliability with automated canary deployments."
+      outcomes: "Deployed on Kubernetes (KIND) using Containerd; improved setup efficiency by 40% and Optimized system responsiveness to 300ms under 100+ concurrent test requests."
     },
     {
-      title: "Infrastructure as Code Framework",
-      description: "Developed a comprehensive Terraform framework for provisioning and managing multi-environment AWS infrastructure.",
+      title: "Node.js ToDo App with CI/CD Pipeline",
+      description: " Designed and automated a full CI/CD pipeline using Jenkins and GitHub Webhooks..",
       image: "project2.jpg",
-      tags: ["Terraform", "AWS", "IaC", "CI/CD"],
-      github: "https://github.com/yourusername/terraform-aws-framework",
+      tags: ["Node.js", "Jenkins", "Docker", " AWS EC2", " GitHub Webhooks"],
+      github: "https://github.com/apurvagargote/Node-todo-cicd",
       demo: "https://architecture-diagram-url.com",
-      outcomes: "Standardized infrastructure provisioning across 3 environments, reducing configuration drift and enabling infrastructure testing."
+      outcomes: "Reduced deployment time by 53% (15min → 7min); maintained 95% build success rate and  Enabled zero-downtime releases using Docker and Nginx reverse proxy on AWS EC2."
     },
     {
-      title: "CI/CD Pipeline Automation",
-      description: "Built a Jenkins pipeline framework with shared libraries for standardized build, test, and deployment processes.",
+      title: "Two-Tier Flask Web App on Kubernetes",
+      description: " Deployed a Flask–MySQL app on Kubernetes with persistent volumes and service discovery.",
       image: "project3.jpg",
-      tags: ["Jenkins", "Docker", "Pipeline-as-Code", "GitOps"],
-      github: "https://github.com/yourusername/jenkins-pipeline-framework",
+      tags: ["Flask", "MySQL", "Kubernetes", "Containerd", "AWS"],
+      github: "https://github.com/apurvagargote/two-tier-flask-app",
       demo: "https://architecture-diagram-url.com",
-      outcomes: "Implemented for 15+ development teams, reducing onboarding time and ensuring consistent security scanning."
-    },
-    {
-      title: "Cloud Cost Optimization Tool",
-      description: "Created an automated solution for identifying and addressing underutilized AWS resources and implementing cost-saving measures.",
-      image: "project4.jpg",
-      tags: ["AWS", "Python", "Lambda", "Cost Optimization"],
-      github: "https://github.com/yourusername/cloud-cost-optimizer",
-      demo: "https://architecture-diagram-url.com",
-      outcomes: "Reduced monthly cloud spend by 35% through automated resource rightsizing and scheduling."
+      outcomes: " Configured 3 services, 2 PVCs, and horizontal pod autoscaling for scalability and Ensured 99.9% uptime through resilient deployment and AWS-based network security."
     }
   ];
 

@@ -10,7 +10,7 @@ const PDFFrame = styled.iframe`
 `;
 
 const Resume = () => {
-  const googleDriveFileId = "1R-fl9tz9UnvlvKqXqwRsJBwBiEaAuPe6"; // replace with your actual file ID
+  const googleDriveFileId = "10tTDWn8uOwTCp6AVP1hQaYj9WJ5APaxe"; // replace with your actual file ID
 
   return (
     <Container className="section">

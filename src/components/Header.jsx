@@ -54,6 +54,8 @@ const Header = () => {
       }
     };
     
+
+    
     const handleClickOutside = (event) => {
       if (navbarRef.current && !navbarRef.current.contains(event.target) && expanded) {
         setExpanded(false);
