@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import { Container, Row, Col, Button, Image } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { ThemeContext } from '../context/ThemeContext';
 import { FaJenkins, FaDocker, FaAws } from 'react-icons/fa';
@@ -77,17 +76,19 @@ const Home = () => {
               <ProfileImage src={profilePhoto} alt="Profile" fluid />
             </Col>
             <Col lg={8} className="text-center text-lg-start">
-              <h1 className="display-4 fw-bold mb-4 gradient-text text-focus-in"> Hey there, I'm
-                <PurpleSpan> Apurva Gargote 👋</PurpleSpan></h1>
+              <h1 className="display-4 fw-bold mb-4 gradient-text">
+                <span className="hero-header">Hey there, I'm</span>
+                <PurpleSpan className="hero-name"> Apurva Gargote 👋</PurpleSpan>
+              </h1>
               <p className="lead mb-5 typing-animation">
                 I'm a passionate DevOps enthusiast and aspiring Cloud Engineer with hands-on experience in building and deploying full-stack applications using tools like Docker, Jenkins, AWS, and Kubernetes.
                 <p>Let's build something awesome together! 🚀</p>
               </p>
               <div>
-                <Button as={Link} to="/contact" variant="primary" size="lg" className="cta-button glow-button me-3">
+                <Button href="#contact" variant="primary" size="lg" className="cta-button glow-button me-3">
                   Contact Me
                 </Button>
-                <Button as={Link} to="/resume" variant={isDarkMode ? "outline-light" : "outline-dark"} size="lg" className="cta-button">
+                <Button href="#resume" variant={isDarkMode ? "outline-light" : "outline-dark"} size="lg" className="cta-button">
                   Download Resume
                 </Button>
               </div>

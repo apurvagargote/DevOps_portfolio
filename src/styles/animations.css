@@ -20,6 +20,40 @@
   width: 100%;
 }
 
+/* Hero header animation */
+.hero-header {
+  display: inline-block;
+  animation: fadeInUp 1s ease forwards;
+}
+
+.hero-name {
+  display: inline-block;
+  animation: colorPulse 2s ease-in-out infinite;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes colorPulse {
+  0% {
+    text-shadow: 0 0 5px rgba(172, 129, 192, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(172, 129, 192, 0.7);
+  }
+  100% {
+    text-shadow: 0 0 5px rgba(172, 129, 192, 0.3);
+  }
+}
+
 /* Card hover effects */
 .project-card {
   transition: all 0.3s ease;
@@ -33,10 +67,65 @@
 /* Skill icon animations */
 .skill-icon {
   transition: all 0.3s ease;
+  font-size: 3rem;
 }
 
 .skill-icon:hover {
   transform: scale(1.2) rotate(5deg);
+}
+
+/* Skills section animations */
+.skill-card {
+  transition: all 0.4s ease;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.skill-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+.skill-card::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: linear-gradient(45deg, var(--accent-color), transparent);
+  z-index: -1;
+  transform: scale(0);
+  transition: transform 0.4s ease;
+  border-radius: 50%;
+}
+
+.skill-card:hover::before {
+  transform: scale(1);
+}
+
+.skill-category-title {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+}
+
+.skill-category-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 3px;
+  background: var(--accent-color);
+  transition: width 0.3s ease;
+}
+
+.skill-category-title:hover::after {
+  width: 100px;
 }
 
 /* Button hover animations */

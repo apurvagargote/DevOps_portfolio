@@ -7,6 +7,26 @@ import {
 import { SiKubernetes, SiTerraform, SiAnsible, SiPrometheus, SiGrafana } from 'react-icons/si';
 
 const Skills = () => {
+  React.useEffect(() => {
+    const cards = document.querySelectorAll('.spotlight-card');
+    
+    cards.forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        
+        card.style.setProperty('--x', `${x}%`);
+        card.style.setProperty('--y', `${y}%`);
+      });
+    });
+    
+    return () => {
+      cards.forEach(card => {
+        card.removeEventListener('mousemove', () => {});
+      });
+    };
+  }, []);
   const skillCategories = [
     {
       title: "CI/CD",
@@ -77,15 +97,14 @@ const Skills = () => {
           </p>
         </Col>
       </Row>
-      
       {skillCategories.map((category, index) => (
         <Row key={index} className="mb-5">
           <Col xs={12}>
-            <h3 className="mb-4">{category.title}</h3>
+            <h3 className="mb-4 reveal">{category.title}</h3>
           </Col>
           {category.skills.map((skill, skillIndex) => (
             <Col key={skillIndex} md={4} className="mb-4">
-              <Card className="h-100 border-0 shadow-sm">
+              <Card className="h-100 border-0 shadow-sm reveal spotlight-card">
                 <Card.Body className="text-center p-4">
                   {skill.icon}
                   <h4 className="mt-3">{skill.name}</h4>

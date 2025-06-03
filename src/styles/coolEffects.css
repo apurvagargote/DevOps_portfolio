@@ -161,4 +161,98 @@
 [data-theme='dark'] .project-card::before {
   background: linear-gradient(90deg, var(--vibrant-teal), var(--vibrant-blue), var(--vibrant-purple));
 }
-/* Add this to your coolEffects.css file */
+/* Custom cursor effects */
+.custom-cursor-outer,
+.custom-cursor-inner {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+}
+
+.custom-cursor-outer {
+  width: 30px;
+  height: 30px;
+  border: 2px solid white;
+  border-radius: 50%;
+  transition: width 0.2s, height 0.2s;
+  mix-blend-mode: difference;
+}
+
+.custom-cursor-inner {
+  width: 6px;
+  height: 6px;
+  background-color: white;
+  border-radius: 50%;
+  transition: width 0.2s, height 0.2s;
+  mix-blend-mode: difference;
+}
+
+/* Cursor hover effect */
+.clickable {
+  cursor: none;
+}
+
+.custom-cursor-hover .custom-cursor-outer {
+  width: 40px;
+  height: 40px;
+}
+
+.custom-cursor-hover .custom-cursor-inner {
+  width: 8px;
+  height: 8px;
+}
+
+/* Spotlight effect for skill cards */
+.spotlight-card {
+  position: relative;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at var(--x, 50%) var(--y, 50%),
+    rgba(172, 129, 192, 0.8) 0%,
+    rgba(172, 129, 192, 0.2) 40%,
+    rgba(172, 129, 192, 0) 60%
+  );
+  opacity: 0;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+/* Light theme specific adjustments */
+:root:not([data-theme='dark']) .spotlight-card::before {
+  background: radial-gradient(
+    circle at var(--x, 50%) var(--y, 50%),
+    rgba(194, 133, 206, 0.7) 0%,
+    rgba(249, 157, 206, 0.3) 30%,
+    rgba(255, 215, 0, 0) 60%
+  );
+  mix-blend-mode: multiply;
+}
+
+.spotlight-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Ensure the content is above the spotlight effect */
+.spotlight-card .card-body {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+}

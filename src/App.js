@@ -1,5 +1,4 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './components/Home';
@@ -15,26 +14,23 @@ import './styles/themes.css';
 import './styles/animations.css';
 import './styles/coolEffects.css';
 
+
 function App() {
   return (
     <ThemeProvider>
-      <Router>
-        <div className="App">
-          <Header />
-          <ScrollReveal />
-          <main>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/skills" element={<Skills />} />
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/resume" element={<Resume />} />
-              <Route path="/contact" element={<Contact />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </Router>
+      <div className="App">
+        <Header />
+        <ScrollReveal />
+        <main>
+          <div id="home"><Home /></div>
+          <div id="about"><About /></div>
+          <div id="skills"><Skills /></div>
+          <div id="projects"><Projects /></div>
+          <div id="resume"><Resume /></div>
+          <div id="contact"><Contact /></div>
+        </main>
+        <Footer />
+      </div>
     </ThemeProvider>
   );
 }

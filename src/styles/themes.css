@@ -75,7 +75,14 @@ p, h1, h2, h3, h4, h5, h6, .section-title {
   background-color: var(--card-bg) !important;
   border-color: var(--border-color) !important;
   box-shadow: var(--card-shadow) !important;
-  transition: background-color var(--transition-speed), border-color var(--transition-speed);
+  transition: all 0.3s ease;
+}
+
+/* Card hover effects */
+.card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
 }
 
 /* Buttons */

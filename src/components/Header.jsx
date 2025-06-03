@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 import { ThemeContext } from '../context/ThemeContext';
 import styled from 'styled-components';
@@ -35,12 +34,23 @@ const Header = () => {
   const { isDarkMode } = useContext(ThemeContext);
   const [expanded, setExpanded] = useState(false);
   const navbarRef = useRef(null);
-  const location = useLocation();
-  
   useEffect(() => {
-    // Close navbar when route changes
-    setExpanded(false);
-  }, [location]);
+    // Close navbar when clicking a navigation link
+    const handleNavClick = () => {
+      setExpanded(false);
+    };
+    
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+      link.addEventListener('click', handleNavClick);
+    });
+    
+    return () => {
+      navLinks.forEach(link => {
+        link.removeEventListener('click', handleNavClick);
+      });
+    };
+  }, []);
   
   useEffect(() => {
     const handleScroll = () => {
@@ -53,8 +63,6 @@ const Header = () => {
         }
       }
     };
-    
-
     
     const handleClickOutside = (event) => {
       if (navbarRef.current && !navbarRef.current.contains(event.target) && expanded) {
@@ -83,7 +91,7 @@ const Header = () => {
     >
       <Container className="d-flex justify-content-between">
         <NavbarBrandWrapper>
-          <Navbar.Brand as={Link} to="/" className="gradient-text">DevOps Portfolio</Navbar.Brand>
+          <Navbar.Brand href="#home" className="gradient-text">DevOps Portfolio</Navbar.Brand>
         </NavbarBrandWrapper>
         <div className="d-flex align-items-center">
           <ThemeToggleWrapper className="d-flex d-lg-none me-2">
@@ -96,12 +104,12 @@ const Header = () => {
         </div>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <Nav.Link as={Link} to="/" onClick={() => setExpanded(false)}>Home</Nav.Link>
-            <Nav.Link as={Link} to="/about" onClick={() => setExpanded(false)}>About</Nav.Link>
-            <Nav.Link as={Link} to="/skills" onClick={() => setExpanded(false)}>Skills</Nav.Link>
-            <Nav.Link as={Link} to="/projects" onClick={() => setExpanded(false)}>Projects</Nav.Link>
-            <Nav.Link as={Link} to="/resume" onClick={() => setExpanded(false)}>Resume</Nav.Link>
-            <Nav.Link as={Link} to="/contact" onClick={() => setExpanded(false)}>Contact</Nav.Link>
+            <Nav.Link href="#home" onClick={() => setExpanded(false)}>Home</Nav.Link>
+            <Nav.Link href="#about" onClick={() => setExpanded(false)}>About</Nav.Link>
+            <Nav.Link href="#skills" onClick={() => setExpanded(false)}>Skills</Nav.Link>
+            <Nav.Link href="#projects" onClick={() => setExpanded(false)}>Projects</Nav.Link>
+            <Nav.Link href="#resume" onClick={() => setExpanded(false)}>Resume</Nav.Link>
+            <Nav.Link href="#contact" onClick={() => setExpanded(false)}>Contact</Nav.Link>
             <ThemeToggleWrapper className="d-none d-lg-flex">
               <ThemeToggle />
             </ThemeToggleWrapper>
