@@ -71,8 +71,13 @@ section[id] {
 }
 
 /* Add some spacing between sections */
-#home, #about, #skills, #projects, #resume, #contact {
+#home, #about, #skills, #projects, #contact {
   position: relative;
+}
+
+#resume {
+  position: relative;
+  min-height: auto !important;
 }
 .navbar-glass {
   backdrop-filter: blur(10px);

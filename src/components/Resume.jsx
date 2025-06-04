@@ -3,17 +3,22 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { FaDownload } from 'react-icons/fa';
 import styled from 'styled-components';
 
+const ResumeContainer = styled(Container)`
+  min-height: auto;
+  padding-bottom: 2rem;
+`;
+
 const PDFFrame = styled.iframe`
   width: 100%;
-  height: 800px;
+  height: 600px;
   border: 1px solid var(--border-color);
   
   @media (max-width: 768px) {
-    height: 500px;
+    height: 400px;
   }
   
   @media (max-width: 576px) {
-    height: 400px;
+    height: 300px;
   }
 `;
 
@@ -21,7 +26,7 @@ const Resume = () => {
   const googleDriveFileId = "10tTDWn8uOwTCp6AVP1hQaYj9WJ5APaxe"; // replace with your actual file ID
 
   return (
-    <Container className="section">
+    <ResumeContainer className="section">
       <Row className="mb-4">
         <Col lg={8} className="mx-auto text-center">
           <h2 className="section-title mb-4">Resume</h2>
@@ -51,7 +56,7 @@ const Resume = () => {
           />
         </Col>
       </Row>
-    </Container>
+    </ResumeContainer>
   );
 };
 
