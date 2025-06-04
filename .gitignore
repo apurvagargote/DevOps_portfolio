@@ -30,3 +30,18 @@ yarn-error.log*
 
 # kubernetes
 kubeconfig
+# node modules
+**/node_modules
+
+# build output
+frontend/build
+backend/dist
+
+# dotenv files
+**/.env
+
+# logs
+*.log
+
+# Docker
+*.env

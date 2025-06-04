@@ -27,7 +27,8 @@ const Contact = () => {
     
     try {
       console.log('Sending data:', formData);
-      const response = await fetch('http://localhost:5000/api/contact', {
+      // In Docker, we use the /api path directly
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

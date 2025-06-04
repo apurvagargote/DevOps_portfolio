@@ -1,41 +1,34 @@
-
-
 services:
-  app:
+  frontend:
     build:
-      context: .
+      context: ./frontend
       dockerfile: infrastructure/Dockerfile
+    image: apurvagargote/portfolio-frontend:latest
     ports:
-      - "800:80"
+      - "2000:80"
     restart: always
+    depends_on:
+      - backend
     networks:
       - portfolio-network
 
-  prometheus:
-    image: prom/prometheus:latest
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: apurvagargote/portfolio-backend:latest
     ports:
-      - "9090:9090"
-    volumes:
-      - ./infrastructure/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
-    networks:
-      - portfolio-network
-
-  grafana:
-    image: grafana/grafana:latest
-    ports:
-      - "3001:3000"
+      - "5000:5000"
+    restart: always
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_USERS_ALLOW_SIGN_UP=false
-    volumes:
-      - grafana-data:/var/lib/grafana
+      - MONGODB_URI=mongodb+srv://apurvagargote:apurva10@cluster0.c6ntv.mongodb.net/portfolio?retryWrites=true&w=majority
+      - PORT=5000
+      - EMAIL_USER=apurvagargote@gmail.com
+      - EMAIL_PASS=nqcn waqp bzgz hmpu
+      - EMAIL_TO=apurvagargote@gmail.com
     networks:
       - portfolio-network
 
 networks:
   portfolio-network:
     driver: bridge
-
-volumes:
-  grafana-data:
