@@ -9,6 +9,9 @@ const Contact = () => {
     message: ''
   });
   const [showAlert, setShowAlert] = useState(false);
+  const [alertVariant, setAlertVariant] = useState('success');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,13 +21,41 @@ const Contact = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // In a real implementation, you would send this data to a backend service
-    console.log('Form submitted:', formData);
-    setShowAlert(true);
-    setFormData({ name: '', email: '', message: '' });
-    setTimeout(() => setShowAlert(false), 5000);
+    setIsSubmitting(true);
+    
+    try {
+      console.log('Sending data:', formData);
+      const response = await fetch('http://localhost:5000/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      
+      console.log('Response status:', response.status);
+      const data = await response.json();
+      console.log('Response data:', data);
+      
+      if (data.success) {
+        setAlertVariant('success');
+        setAlertMessage('Your message has been sent successfully!');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        setAlertVariant('danger');
+        setAlertMessage(data.error || 'Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setAlertVariant('danger');
+      setAlertMessage('Connection error. Is the backend server running?');
+    } finally {
+      setIsSubmitting(false);
+      setShowAlert(true);
+      setTimeout(() => setShowAlert(false), 5000);
+    }
   };
 
   return (
@@ -90,8 +121,8 @@ const Contact = () => {
               <h3 className="mb-4">Send a Message</h3>
 
               {showAlert && (
-                <Alert variant="success" onClose={() => setShowAlert(false)} dismissible>
-                  Your message has been sent successfully!
+                <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible>
+                  {alertMessage}
                 </Alert>
               )}
 
@@ -130,8 +161,13 @@ const Contact = () => {
                   />
                 </Form.Group>
 
-                <Button variant="primary" type="submit" size="lg">
-                  Send Message
+                <Button 
+                  variant="primary" 
+                  type="submit" 
+                  size="lg" 
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </Button>
               </Form>
             </Card.Body>

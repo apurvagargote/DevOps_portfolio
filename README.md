@@ -131,3 +131,30 @@ Access Grafana dashboards at `http://your-domain/grafana` (credentials in AWS Se
 ## License
 
 MIT
+# Contact Form Setup Instructions
+
+## Backend Setup
+1. Navigate to the backend directory:
+   ```
+   cd backend
+   ```
+
+2. Install dependencies:
+   ```
+   npm install
+   ```
+
+3. Configure environment variables:
+   - Edit the `.env` file with your MongoDB connection string
+   - Add email credentials if you want email notifications
+
+4. Start the backend server:
+   ```
+   npm run dev
+   ```
+
+## Frontend Setup
+The frontend is already configured to send requests to the backend API at `http://localhost:5000/api/contact`.
+
+## Production Deployment
+For production, update the API URL in `Contact.jsx` to point to your deployed backend.
