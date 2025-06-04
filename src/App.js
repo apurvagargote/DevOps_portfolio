@@ -22,12 +22,12 @@ function App() {
         <Header />
         <ScrollReveal />
         <main>
-          <div id="home"><Home /></div>
-          <div id="about"><About /></div>
-          <div id="skills"><Skills /></div>
-          <div id="projects"><Projects /></div>
-          <div id="resume"><Resume /></div>
-          <div id="contact"><Contact /></div>
+          <section id="home" aria-label="Home section"><Home /></section>
+          <section id="about" aria-label="About section"><About /></section>
+          <section id="skills" aria-label="Skills section"><Skills /></section>
+          <section id="projects" aria-label="Projects section"><Projects /></section>
+          <section id="resume" aria-label="Resume section"><Resume /></section>
+          <section id="contact" aria-label="Contact section"><Contact /></section>
         </main>
         <Footer />
       </div>
@@ -35,4 +35,4 @@ function App() {
   );
 }
 
-export default App;
+export default App; 

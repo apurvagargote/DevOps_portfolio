@@ -61,9 +61,12 @@ html {
   scroll-behavior: smooth;
 }
 
-main > div {
-  /* padding-top: 80px; */
-  min-height: 100vh;
+/* Fix section scroll positioning */
+html {
+  scroll-behavior: smooth;
+}
+
+section[id] {
   scroll-margin-top: 70px;
 }
 

@@ -1,75 +1,65 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
+import { FaLightbulb } from 'react-icons/fa';
 import styled from 'styled-components';
-import { FaSun, FaMoon } from 'react-icons/fa';
 
-const ToggleContainer = styled.button`
-  background: ${({ isDarkMode }) => 
-    isDarkMode ? 'linear-gradient(to right, #30cfd0, #330867)' : 'linear-gradient(to right, #f83600, #f9d423)'};
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
+const ToggleContainer = styled.div`
   display: flex;
-  font-size: 0.5rem;
-  justify-content: space-between;
-  margin: 0 auto;
-  overflow: hidden;
-  padding: 0.5rem;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
   position: relative;
-  width: 60px;
-  height: 30px;
-  outline: none;
-  transition: all 0.3s ease;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+`;
 
-  &:hover {
-    transform: scale(1.05);
+const String = styled.div`
+  width: 2px;
+  height: 15px;
+  background-color: #888;
+  
+  @media (max-width: 992px) {
+    height: 10px;
   }
 `;
 
-const Icons = styled.div`
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: all 0.3s linear;
-`;
-
-const IconWrapper = styled.span`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  color: white;
-  z-index: 1;
-`;
-
-const Slider = styled.div`
-  background-color: #fff;
-  border-radius: 50%;
-  position: absolute;
-  top: 2px;
-  left: ${({ isDarkMode }) => (isDarkMode ? '2px' : 'calc(100% - 28px)')};
-  height: 26px;
-  width: 26px;
+const BulbWrapper = styled.div`
+  transform: rotate(180deg);
+  color: ${props => props.isDarkMode ? '#555' : '#f8d568'};
+  font-size: 1.5rem;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  position: relative;
+  
+  @media (max-width: 992px) {
+    font-size: 1.2rem;
+  }
+`;
+
+const Glow = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 25px;
+  height: 25px;
+  background: radial-gradient(circle, rgba(255,213,0,0.6) 0%, rgba(255,213,0,0) 70%);
+  border-radius: 50%;
+  opacity: ${props => props.isDarkMode ? 0 : 1};
+  transition: opacity 0.3s ease;
+  z-index: -1;
 `;
 
 const ThemeToggle = () => {
   const { isDarkMode, toggleTheme } = useContext(ThemeContext);
-
+  
   return (
-    <ToggleContainer isDarkMode={isDarkMode} onClick={toggleTheme} aria-label="Toggle dark mode">
-      <Icons>
-        <IconWrapper>
-          <FaSun size={16} />
-        </IconWrapper>
-        <IconWrapper>
-          <FaMoon size={16} />
-        </IconWrapper>
-      </Icons>
-      <Slider isDarkMode={isDarkMode} />
+    <ToggleContainer onClick={toggleTheme}>
+      <String />
+      <BulbWrapper isDarkMode={isDarkMode}>
+        <Glow isDarkMode={isDarkMode} />
+        <FaLightbulb />
+      </BulbWrapper>
     </ToggleContainer>
   );
 };

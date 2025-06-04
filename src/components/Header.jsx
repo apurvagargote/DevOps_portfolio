@@ -52,6 +52,34 @@ const Header = () => {
     };
   }, []);
   
+  // Add active class to nav links based on scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = document.querySelectorAll('section[id]');
+      const scrollPosition = window.pageYOffset + 100; // Offset for better detection
+      
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.offsetHeight;
+        const sectionId = section.getAttribute('id');
+        const navLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
+        
+        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+          navLink?.classList.add('active');
+        } else {
+          navLink?.classList.remove('active');
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+  
   useEffect(() => {
     const handleScroll = () => {
       const navbar = document.querySelector('.navbar');
@@ -81,6 +109,7 @@ const Header = () => {
   
   return (
     <Navbar 
+      as="nav"
       bg={isDarkMode ? "dark" : "light"} 
       variant={isDarkMode ? "dark" : "light"} 
       expand="lg" 
@@ -88,6 +117,8 @@ const Header = () => {
       className="navbar-dark"
       expanded={expanded}
       ref={navbarRef}
+      role="navigation"
+      aria-label="Main navigation"
     >
       <Container className="d-flex justify-content-between">
         <NavbarBrandWrapper>
@@ -100,19 +131,22 @@ const Header = () => {
           <CustomToggle 
             aria-controls="basic-navbar-nav" 
             onClick={() => setExpanded(!expanded)}
+            aria-label="Toggle navigation"
           />
         </div>
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
-            <Nav.Link href="#home" onClick={() => setExpanded(false)}>Home</Nav.Link>
-            <Nav.Link href="#about" onClick={() => setExpanded(false)}>About</Nav.Link>
-            <Nav.Link href="#skills" onClick={() => setExpanded(false)}>Skills</Nav.Link>
-            <Nav.Link href="#projects" onClick={() => setExpanded(false)}>Projects</Nav.Link>
-            <Nav.Link href="#resume" onClick={() => setExpanded(false)}>Resume</Nav.Link>
-            <Nav.Link href="#contact" onClick={() => setExpanded(false)}>Contact</Nav.Link>
-            <ThemeToggleWrapper className="d-none d-lg-flex">
-              <ThemeToggle />
-            </ThemeToggleWrapper>
+          <Nav className="ms-auto" as="ul">
+            <Nav.Item as="li"><Nav.Link href="#home" onClick={() => setExpanded(false)}>Home</Nav.Link></Nav.Item>
+            <Nav.Item as="li"><Nav.Link href="#about" onClick={() => setExpanded(false)}>About</Nav.Link></Nav.Item>
+            <Nav.Item as="li"><Nav.Link href="#skills" onClick={() => setExpanded(false)}>Skills</Nav.Link></Nav.Item>
+            <Nav.Item as="li"><Nav.Link href="#projects" onClick={() => setExpanded(false)}>Projects</Nav.Link></Nav.Item>
+            <Nav.Item as="li"><Nav.Link href="#resume" onClick={() => setExpanded(false)}>Resume</Nav.Link></Nav.Item>
+            <Nav.Item as="li"><Nav.Link href="#contact" onClick={() => setExpanded(false)}>Contact</Nav.Link></Nav.Item>
+            <Nav.Item as="li">
+              <ThemeToggleWrapper className="d-none d-lg-flex">
+                <ThemeToggle />
+              </ThemeToggleWrapper>
+            </Nav.Item>
           </Nav>
         </Navbar.Collapse>
       </Container>

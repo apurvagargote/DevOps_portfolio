@@ -80,10 +80,10 @@ const Home = () => {
                 <span className="hero-header">Hey there, I'm</span>
                 <PurpleSpan className="hero-name"> Apurva Gargote 👋</PurpleSpan>
               </h1>
-              <p className="lead mb-5 typing-animation">
-                I'm a passionate DevOps enthusiast and aspiring Cloud Engineer with hands-on experience in building and deploying full-stack applications using tools like Docker, Jenkins, AWS, and Kubernetes.
+              <div className="lead mb-5 typing-animation">
+                <p>I'm a passionate DevOps enthusiast and aspiring Cloud Engineer with hands-on experience in building and deploying full-stack applications using tools like Docker, Jenkins, AWS, and Kubernetes.</p>
                 <p>Let's build something awesome together! 🚀</p>
-              </p>
+              </div>
               <div>
                 <Button href="#contact" variant="primary" size="lg" className="cta-button glow-button me-3">
                   Contact Me
@@ -102,7 +102,7 @@ const Home = () => {
           <Col lg={8} className="mx-auto text-center">
             <h2 className="section-title reveal">What I Do</h2>
             <p className="lead mb-5 reveal">
-              I’m learning to design and implement DevOps solutions that help bridge development and operations, aiming to make software delivery faster and more reliable.
+              I'm learning to design and implement DevOps solutions that help bridge development and operations, aiming to make software delivery faster and more reliable.
             </p>
           </Col>
         </Row>
