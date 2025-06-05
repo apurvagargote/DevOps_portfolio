@@ -1,160 +1,65 @@
-# DevOps Portfolio Website
+# Portfolio Project with K3s Deployment
 
-A professional portfolio website built with React and deployed using a complete DevOps SDLC pipeline.
+This project demonstrates a complete CI/CD pipeline for a portfolio website with:
+- Frontend (React)
+- Backend (Node.js)
+- Kubernetes deployment on AWS EC2 using K3s
+- Monitoring with Prometheus and Grafana
 
-## Architecture Overview
-
-![Architecture Diagram](https://via.placeholder.com/800x400?text=Portfolio+Architecture+Diagram)
-
-This project demonstrates a complete DevOps workflow with:
-
-- **Frontend**: React-based portfolio website with modular components
-- **Infrastructure**: AWS resources provisioned with Terraform
-- **Containerization**: Docker for application packaging
-- **Orchestration**: Kubernetes (EKS) for container management
-- **CI/CD**: GitHub Actions for automated build, test, and deployment
-- **Monitoring**: Prometheus and Grafana for infrastructure and application metrics
-
-## Project Structure
+## Architecture
 
 ```
-portfolio/
-├── public/                  # Static assets
-├── src/                     # React application source code
-│   ├── components/          # Reusable React components
-│   │   ├── Header.jsx       # Navigation header
-│   │   ├── Footer.jsx       # Page footer
-│   │   ├── Home.jsx         # Home/landing page
-│   │   ├── About.jsx        # About me section
-│   │   ├── Skills.jsx       # Skills and tools section
-│   │   ├── Projects.jsx     # DevOps projects showcase
-│   │   ├── Resume.jsx       # Resume and experience
-│   │   └── Contact.jsx      # Contact information and form
-│   ├── assets/              # Images and other assets
-│   └── styles/              # CSS and styled components
-├── infrastructure/          # Infrastructure as Code
-│   ├── terraform/           # Terraform configurations for AWS
-│   ├── kubernetes/          # Kubernetes manifests
-│   ├── ansible/             # Ansible playbooks for configuration
-│   └── monitoring/          # Prometheus and Grafana configurations
-└── .github/workflows/       # CI/CD pipeline definitions
+GitHub -> GitHub Actions -> Docker Hub -> K3s on EC2 -> Ingress -> Frontend/Backend
 ```
 
-## DevOps SDLC Workflow
+## Setup Instructions
 
-1. **Code**: Develop React components and infrastructure code
-2. **Build**: Compile React app and build Docker image
-3. **Test**: Run automated tests for React components
-4. **Deploy**: 
-   - Provision AWS infrastructure with Terraform
-   - Configure instances with Ansible
-   - Deploy to Kubernetes with kubectl
-5. **Monitor**: Track performance with Prometheus and Grafana
+### 1. Provision EC2 with Terraform
 
-## Local Development
+```bash
+cd terraform
+terraform init
+terraform apply -var="key_name=your-key-pair-name"
+```
 
-### Prerequisites
+### 2. Install K3s on EC2
 
-- Node.js 16+
-- Docker and Docker Compose
-- Minikube (for local Kubernetes testing)
+SSH into your EC2 instance and run the installation script:
 
-### Setup
+```bash
+ssh -i your-key.pem ubuntu@<ec2-public-ip>
+chmod +x scripts/install-k3s.sh
+./scripts/install-k3s.sh
+```
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/yourusername/portfolio.git
-   cd portfolio
-   ```
+### 3. Get Kubeconfig
 
-2. Install dependencies:
-   ```
-   npm install
-   ```
+```bash
+ssh -i your-key.pem ubuntu@<ec2-public-ip> 'sudo cat /etc/rancher/k3s/k3s.yaml' > kubeconfig.yaml
+# Edit kubeconfig.yaml to replace 127.0.0.1 with your EC2 public IP
+```
 
-3. Start the development server:
-   ```
-   npm start
-   ```
+### 4. Set up GitHub Secrets
 
-4. Build for production:
-   ```
-   npm run build
-   ```
+Add the following secrets to your GitHub repository:
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `DOCKERHUB_USERNAME`
+- `DOCKERHUB_TOKEN`
+- `KUBE_CONFIG` (contents of your kubeconfig.yaml file)
 
-## Deployment
+### 5. Deploy to Kubernetes
 
-### Local Kubernetes Deployment
+Push to your main branch and GitHub Actions will:
+1. Build and push Docker images to Docker Hub
+2. Deploy your application to K3s
 
-1. Start Minikube:
-   ```
-   minikube start
-   ```
+## Accessing Your Application
 
-2. Build and deploy to local Kubernetes:
-   ```
-   docker build -t portfolio:latest .
-   kubectl apply -f infrastructure/kubernetes/deployment.yaml
-   ```
-
-3. Access the application:
-   ```
-   minikube service portfolio-service
-   ```
-
-### AWS Deployment
-
-The project is set up for automated deployment to AWS EKS using GitHub Actions:
-
-1. Configure the following GitHub secrets:
-   - `AWS_ACCESS_KEY_ID`
-   - `AWS_SECRET_ACCESS_KEY`
-   - `DOCKERHUB_USERNAME`
-   - `DOCKERHUB_TOKEN`
-
-2. Push to the main branch to trigger the CI/CD pipeline:
-   ```
-   git push origin main
-   ```
-
-3. The pipeline will:
-   - Build and test the React application
-   - Create a Docker image and push to Docker Hub
-   - Apply Terraform configurations to provision AWS resources
-   - Deploy the application to EKS
-   - Configure monitoring with Prometheus and Grafana
+- Frontend: http://<ec2-public-ip>/
+- Backend API: http://<ec2-public-ip>/api
+- Grafana: http://<ec2-public-ip>/grafana (default credentials: admin/admin)
 
 ## Monitoring
 
-Access Grafana dashboards at `http://your-domain/grafana` (credentials in AWS Secrets Manager)
-
-## License
-
-MIT
-# Contact Form Setup Instructions
-
-## Backend Setup
-1. Navigate to the backend directory:
-   ```
-   cd backend
-   ```
-
-2. Install dependencies:
-   ```
-   npm install
-   ```
-
-3. Configure environment variables:
-   - Edit the `.env` file with your MongoDB connection string
-   - Add email credentials if you want email notifications
-
-4. Start the backend server:
-   ```
-   npm run dev
-   ```
-
-## Frontend Setup
-The frontend is already configured to send requests to the backend API at `http://localhost:5000/api/contact`.
-
-## Production Deployment
-For production, update the API URL in `Contact.jsx` to point to your deployed backend.
+Access Grafana dashboard at http://<ec2-public-ip>/grafana to view metrics from Prometheus.

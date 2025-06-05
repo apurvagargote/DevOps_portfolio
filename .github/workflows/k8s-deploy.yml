@@ -1,0 +1,86 @@
+name: Deploy to Kubernetes
+
+on:
+  push:
+    branches: [ dev ]
+    paths-ignore:
+      - 'README.md'
+      - 'terraform/**'
+  workflow_run:
+    workflows: ["Docker Build and Push"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'push' }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v3
+      
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+    
+    - name: Set environment namespace
+      id: set-env
+      run: |
+        if [ "${{ github.ref }}" = "refs/heads/dev" ]; then
+          echo "NAMESPACE=production" >> $GITHUB_OUTPUT
+          echo "TAG=latest" >> $GITHUB_OUTPUT
+        else
+          echo "NAMESPACE=development" >> $GITHUB_OUTPUT
+          echo "TAG=dev" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Create namespace if not exists
+      run: |
+        kubectl create namespace ${{ steps.set-env.outputs.NAMESPACE }} --dry-run=client -o yaml | kubectl apply -f -
+        
+    - name: Get EC2 public IP
+      id: get-ip
+      run: |
+        EC2_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=k3s-server" --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
+        echo "EC2_IP=$EC2_IP" >> $GITHUB_ENV
+        echo "EC2 IP: $EC2_IP"
+    
+    - name: Setup kubeconfig
+      run: |
+        mkdir -p ~/.kube
+        echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+        sed -i "s/server: https:\/\/127.0.0.1:6443/server: https:\/\/${{ env.EC2_IP }}:6443/g" ~/.kube/config
+        chmod 600 ~/.kube/config
+    
+    - name: Deploy secrets
+      run: |
+        kubectl apply -f kubernetes/manifests/secrets.yaml -n ${{ steps.set-env.outputs.NAMESPACE }}
+      
+    - name: Deploy backend with correct tag
+      run: |
+        sed "s|image: apurvagargote/portfolio-backend:latest|image: apurvagargote/portfolio-backend:${{ steps.set-env.outputs.TAG }}|g" kubernetes/manifests/backend-deployment.yaml | kubectl apply -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
+        
+    - name: Deploy frontend with correct tag
+      run: |
+        sed "s|image: apurvagargote/portfolio-frontend:latest|image: apurvagargote/portfolio-frontend:${{ steps.set-env.outputs.TAG }}|g" kubernetes/manifests/frontend-deployment.yaml | kubectl apply -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
+        
+    - name: Deploy ingress
+      run: |
+        kubectl apply -f kubernetes/manifests/ingress.yaml -n ${{ steps.set-env.outputs.NAMESPACE }}
+        
+    - name: Deploy monitoring
+      run: |
+        kubectl apply -f kubernetes/manifests/monitoring.yaml
+        
+    - name: Verify deployment
+      run: |
+        kubectl get pods -n ${{ steps.set-env.outputs.NAMESPACE }}
+        kubectl get services -n ${{ steps.set-env.outputs.NAMESPACE }}
+        kubectl get ingress -n ${{ steps.set-env.outputs.NAMESPACE }}

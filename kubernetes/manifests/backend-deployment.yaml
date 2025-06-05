@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portfolio-backend
+  labels:
+    app: portfolio-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: portfolio-backend
+  template:
+    metadata:
+      labels:
+        app: portfolio-backend
+    spec:
+      containers:
+      - name: portfolio-backend
+        image: apurvagargote/portfolio-backend:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGODB_URI
+          valueFrom:
+            secretKeyRef:
+              name: portfolio-secrets
+              key: mongodb-uri
+        - name: PORT
+          value: "5000"
+        - name: EMAIL_USER
+          valueFrom:
+            secretKeyRef:
+              name: portfolio-secrets
+              key: email-user
+        - name: EMAIL_PASS
+          valueFrom:
+            secretKeyRef:
+              name: portfolio-secrets
+              key: email-pass
+        - name: EMAIL_TO
+          valueFrom:
+            secretKeyRef:
+              name: portfolio-secrets
+              key: email-to
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "512Mi"
+          requests:
+            cpu: "0.2"
+            memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: portfolio-backend-service
+spec:
+  selector:
+    app: portfolio-backend
+  ports:
+  - port: 5000
+    targetPort: 5000
+  type: ClusterIP

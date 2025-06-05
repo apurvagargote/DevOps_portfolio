@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
   pull_request:
-    branches: [ main ]
+    branches: [ dev ]
 
 jobs:
   build:
@@ -40,7 +40,7 @@ jobs:
   docker:
     needs: build
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/dev')
     
     steps:
     - uses: actions/checkout@v3
@@ -60,19 +60,30 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     
+    - name: Set Docker tag
+      id: set-tag
+      run: |
+        if [ "${{ github.ref }}" = "refs/heads/dev" ]; then
+          echo "TAG=latest" >> $GITHUB_OUTPUT
+          echo "ENV=prod" >> $GITHUB_OUTPUT
+        else
+          echo "TAG=dev" >> $GITHUB_OUTPUT
+          echo "ENV=dev" >> $GITHUB_OUTPUT
+        fi
+    
     - name: Build and push Docker image
       uses: docker/build-push-action@v4
       with:
         context: .
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/portfolio:latest,${{ secrets.DOCKERHUB_USERNAME }}/portfolio:${{ github.sha }}
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/portfolio:${{ steps.set-tag.outputs.TAG }},${{ secrets.DOCKERHUB_USERNAME }}/portfolio:${{ github.sha }}
         cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/portfolio:buildcache
         cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/portfolio:buildcache,mode=max
 
   deploy:
     needs: docker
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/dev')
     
     steps:
     - uses: actions/checkout@v3
@@ -89,6 +100,15 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
     
+    - name: Set environment
+      id: set-env
+      run: |
+        if [ "${{ github.ref }}" = "refs/heads/dev" ]; then
+          echo "ENV=prod" >> $GITHUB_OUTPUT
+        else
+          echo "ENV=dev" >> $GITHUB_OUTPUT
+        fi
+    
     - name: Terraform Init
       run: |
         cd infrastructure/terraform
@@ -97,13 +117,12 @@ jobs:
     - name: Terraform Plan
       run: |
         cd infrastructure/terraform
-        terraform plan -var="environment=prod"
+        terraform plan -var="environment=${{ steps.set-env.outputs.ENV }}"
     
     - name: Terraform Apply
-      if: github.ref == 'refs/heads/main'
       run: |
         cd infrastructure/terraform
-        terraform apply -auto-approve -var="environment=prod"
+        terraform apply -auto-approve -var="environment=${{ steps.set-env.outputs.ENV }}"
     
     - name: Update Kubernetes deployment
       run: |
