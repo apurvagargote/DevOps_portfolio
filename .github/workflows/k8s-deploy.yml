@@ -61,7 +61,12 @@ jobs:
     
     - name: Deploy secrets
       run: |
-        kubectl apply -f kubernetes/manifests/secrets.yaml -n ${{ steps.set-env.outputs.NAMESPACE }}
+        cat kubernetes/manifests/secrets.yaml | \
+        sed "s|\${MONGODB_URI}|${{ secrets.MONGODB_URI }}|g" | \
+        sed "s|\${EMAIL_USER}|${{ secrets.EMAIL_USER }}|g" | \
+        sed "s|\${EMAIL_PASS}|${{ secrets.EMAIL_PASS }}|g" | \
+        sed "s|\${EMAIL_TO}|${{ secrets.EMAIL_TO }}|g" | \
+        kubectl apply -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
       
     - name: Deploy backend with correct tag
       run: |

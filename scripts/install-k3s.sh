@@ -7,10 +7,11 @@ sudo apt-get upgrade -y
 # Install prerequisites
 sudo apt-get install -y curl unzip
 
-# Install K3s
-curl -sfL https://get.k3s.io | sh -
+# Install K3s without Traefik (we'll use NGINX Ingress)
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable=traefik" sh -
 
 # Wait for K3s to be ready
+echo "Waiting for K3s to be ready..."
 sleep 30
 
 # Copy kubeconfig to a more accessible location

@@ -19,6 +19,13 @@ resource "aws_instance" "k3s_server" {
   user_data = <<-EOF
               #!/bin/bash
               echo "Preparing for K3s installation..."
+              apt-get update
+              apt-get install -y git
+              git clone https://github.com/apurvagargote/new-portfolio.git /home/ubuntu/portfolio
+              chmod +x /home/ubuntu/portfolio/scripts/install-k3s.sh
+              /home/ubuntu/portfolio/scripts/install-k3s.sh
+              chmod +x /home/ubuntu/portfolio/scripts/setup-nginx-ingress.sh
+              /home/ubuntu/portfolio/scripts/setup-nginx-ingress.sh
               EOF
 }
 
