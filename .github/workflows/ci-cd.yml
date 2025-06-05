@@ -70,8 +70,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     
-    - name: Set up kubectl
-      uses: azure/setup-kubectl@v3
+    - name: Install kubectl
+      run: |
+        curl -LO "https://dl.k8s.io/release/stable.txt"
+        curl -LO "https://dl.k8s.io/release/$(cat stable.txt)/bin/linux/amd64/kubectl"
+        chmod +x kubectl
+        sudo mv kubectl /usr/local/bin/
     
     - name: Set environment namespace
       id: set-env
@@ -88,9 +92,12 @@ jobs:
       run: |
         mkdir -p ~/.kube
         echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
-        sed -i "s/server: https:\/\/127.0.0.1:6443/server: https:\/\/3.80.91.213:6443/g" ~/.kube/config
         chmod 600 ~/.kube/config
-        cat ~/.kube/config
+    
+    - name: Test kubectl connection
+      run: |
+        kubectl version --client
+        kubectl get nodes
     
     - name: Create namespace if not exists
       run: |
