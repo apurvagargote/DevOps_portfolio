@@ -111,25 +111,25 @@ jobs:
     
     - name: Terraform Init
       run: |
-        cd infrastructure/terraform
+        cd terraform
         terraform init
     
     - name: Terraform Plan
       run: |
-        cd infrastructure/terraform
+        cd terraform
         terraform plan -var="environment=${{ steps.set-env.outputs.ENV }}"
     
     - name: Terraform Apply
       run: |
-        cd infrastructure/terraform
+        cd terraform
         terraform apply -auto-approve -var="environment=${{ steps.set-env.outputs.ENV }}"
     
     - name: Update Kubernetes deployment
       run: |
         aws eks update-kubeconfig --name portfolio-cluster --region us-east-1
-        sed -i "s|\${DOCKER_REGISTRY}|${{ secrets.DOCKERHUB_USERNAME }}|g" infrastructure/kubernetes/deployment.yaml
-        sed -i "s|\${IMAGE_TAG}|${{ github.sha }}|g" infrastructure/kubernetes/deployment.yaml
-        kubectl apply -f infrastructure/kubernetes/deployment.yaml
+        sed -i "s|\${DOCKER_REGISTRY}|${{ secrets.DOCKERHUB_USERNAME }}|g" kubernetes/deployment.yaml
+        sed -i "s|\${IMAGE_TAG}|${{ github.sha }}|g" kubernetes/deployment.yaml
+        kubectl apply -f kubernetes/deployment.yaml
     
     - name: Verify deployment
       run: |

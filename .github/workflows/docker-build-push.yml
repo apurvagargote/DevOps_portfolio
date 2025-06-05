@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [ dev ]
 
+env:
+  MONGODB_URI: ${{ secrets.MONGODB_URI }}
+  EMAIL_USER: ${{ secrets.EMAIL_USER }}
+  EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+  EMAIL_TO: ${{ secrets.EMAIL_TO }}
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -13,19 +19,29 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
+    - name: Create backend .env file
+      run: |
+        cat > backend/.env << EOF
+        MONGODB_URI=${{ secrets.MONGODB_URI }}
+        PORT=5000
+        EMAIL_USER=${{ secrets.EMAIL_USER }}
+        EMAIL_PASS=${{ secrets.EMAIL_PASS }}
+        EMAIL_TO=${{ secrets.EMAIL_TO }}
+        EOF
+    
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
     
     - name: Login to DockerHub
       uses: docker/login-action@v2
       with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        username: apurva1025
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     
     - name: Set Docker tag
       id: set-tag
       run: |
-        if [ "${{ github.ref }}" = "refs/heads/devn" ]; then
+        if [ "${{ github.ref }}" = "refs/heads/main" ]; then
           echo "TAG=latest" >> $GITHUB_OUTPUT
         else
           echo "TAG=dev" >> $GITHUB_OUTPUT
@@ -35,9 +51,10 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: ./frontend
-        file: ./frontend/infrastructure/Dockerfile
+        file: ./frontend/Dockerfile
         push: true
-        tags: apurvagargote/portfolio-frontend:${{ steps.set-tag.outputs.TAG }}
+        tags: apurva1025/portfolio-frontend:${{ steps.set-tag.outputs.TAG }}
+        provenance: false
     
     - name: Build and push backend
       uses: docker/build-push-action@v4
@@ -45,4 +62,5 @@ jobs:
         context: ./backend
         file: ./backend/Dockerfile
         push: true
-        tags: apurvagargote/portfolio-backend:${{ steps.set-tag.outputs.TAG }}
+        tags: apurva1025/portfolio-backend:${{ steps.set-tag.outputs.TAG }}
+        provenance: false

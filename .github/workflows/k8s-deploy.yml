@@ -70,11 +70,11 @@ jobs:
       
     - name: Deploy backend with correct tag
       run: |
-        sed "s|image: apurvagargote/portfolio-backend:latest|image: apurvagargote/portfolio-backend:${{ steps.set-env.outputs.TAG }}|g" kubernetes/manifests/backend-deployment.yaml | kubectl apply -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
+        sed "s|image: apurvagargote/portfolio-backend:latest|image: apurva1025/portfolio-backend:${{ steps.set-tag.outputs.TAG }}|g" kubernetes/manifests/backend-deployment.yaml | kubectl apply -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
         
     - name: Deploy frontend with correct tag
       run: |
-        sed "s|image: apurvagargote/portfolio-frontend:latest|image: apurvagargote/portfolio-frontend:${{ steps.set-env.outputs.TAG }}|g" kubernetes/manifests/frontend-deployment.yaml | kubectl apply -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
+        sed "s|image: apurvagargote/portfolio-frontend:latest|image: apurva1025/portfolio-frontend:${{ steps.set-tag.outputs.TAG }}|g" kubernetes/manifests/frontend-deployment.yaml | kubectl apply -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
         
     - name: Deploy ingress
       run: |

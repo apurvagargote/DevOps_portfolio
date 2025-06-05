@@ -10,10 +10,10 @@ output "k3s_server_public_dns" {
 
 output "ssh_command" {
   description = "SSH command to connect to the K3s server"
-  value       = "ssh -i ${var.key_name}.pem ubuntu@${aws_instance.k3s_server.public_ip}"
+  value       = "ssh -i ~/.ssh/k3s-key.pem ubuntu@${aws_instance.k3s_server.public_ip}"
 }
 
 output "kubeconfig_command" {
   description = "Command to get kubeconfig from the K3s server"
-  value       = "ssh -i ${var.key_name}.pem ubuntu@${aws_instance.k3s_server.public_ip} 'sudo cat /etc/rancher/k3s/k3s.yaml' > kubeconfig.yaml"
+  value       = "ssh -i ~/.ssh/k3s-key.pem ubuntu@${aws_instance.k3s_server.public_ip} 'sudo cat /etc/rancher/k3s/k3s.yaml' > kubeconfig.yaml"
 }

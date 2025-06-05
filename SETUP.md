@@ -28,19 +28,22 @@ Add these secrets to your GitHub repository:
 ```bash
 cd terraform
 terraform init
-terraform apply -var="key_name=your-key-pair-name"
+terraform apply
 ```
 
 This will:
-- Create an EC2 instance
+- Create a t2.micro EC2 instance (free tier eligible)
+- Generate an SSH key pair automatically
 - Install K3s automatically
 - Set up NGINX Ingress Controller
+
+The SSH private key will be saved as `terraform/k3s-key.pem`.
 
 ## Step 3: Get Kubeconfig
 
 ```bash
-# SSH into your EC2 instance
-ssh -i your-key.pem ubuntu@<ec2-public-ip>
+# SSH into your EC2 instance using the generated key
+ssh -i terraform/k3s-key.pem ubuntu@<ec2-public-ip>
 
 # Copy the kubeconfig
 cat ~/.kube/config
@@ -71,7 +74,7 @@ This will trigger the GitHub Actions workflow to:
 
 ```bash
 # SSH into your EC2 instance
-ssh -i your-key.pem ubuntu@<ec2-public-ip>
+ssh -i terraform/k3s-key.pem ubuntu@<ec2-public-ip>
 
 # Run the monitoring setup script
 chmod +x ~/portfolio/scripts/setup-monitoring.sh
