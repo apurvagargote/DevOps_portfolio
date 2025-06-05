@@ -2,54 +2,28 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ dev, main ]
   pull_request:
-    branches: [ dev ]
+    branches: [ dev, main ]
 
 jobs:
-  build:
+  docker-build-push:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
     
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
-        cache: 'npm'
-    
-    - name: Install dependencies
-      run: npm ci
-    
-    - name: Run linting
-      run: npm run lint || echo "No linting configured"
-    
-    - name: Run tests
-      run: npm test || echo "No tests configured"
-    
-    - name: Build
-      run: npm run build
-    
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: build-files
-        path: build/
-
-  docker:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/dev')
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Download build artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: build-files
-        path: build/
+    - name: Create backend .env file
+      run: |
+        cat > backend/.env << EOF
+        MONGODB_URI=${{ secrets.MONGODB_URI }}
+        PORT=5000
+        EMAIL_USER=${{ secrets.EMAIL_USER }}
+        EMAIL_PASS=${{ secrets.EMAIL_PASS }}
+        EMAIL_TO=${{ secrets.EMAIL_TO }}
+        EOF
     
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
@@ -57,80 +31,94 @@ jobs:
     - name: Login to DockerHub
       uses: docker/login-action@v2
       with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        username: apurva1025
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     
     - name: Set Docker tag
       id: set-tag
       run: |
-        if [ "${{ github.ref }}" = "refs/heads/dev" ]; then
+        if [ "${{ github.ref }}" = "refs/heads/main" ]; then
           echo "TAG=latest" >> $GITHUB_OUTPUT
-          echo "ENV=prod" >> $GITHUB_OUTPUT
+          echo "NAMESPACE=production" >> $GITHUB_OUTPUT
         else
           echo "TAG=dev" >> $GITHUB_OUTPUT
-          echo "ENV=dev" >> $GITHUB_OUTPUT
+          echo "NAMESPACE=development" >> $GITHUB_OUTPUT
         fi
     
-    - name: Build and push Docker image
+    - name: Build and push frontend
       uses: docker/build-push-action@v4
       with:
-        context: .
+        context: ./frontend
+        file: ./frontend/Dockerfile
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/portfolio:${{ steps.set-tag.outputs.TAG }},${{ secrets.DOCKERHUB_USERNAME }}/portfolio:${{ github.sha }}
-        cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/portfolio:buildcache
-        cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/portfolio:buildcache,mode=max
+        tags: apurva1025/portfolio-frontend:${{ steps.set-tag.outputs.TAG }}
+    
+    - name: Build and push backend
+      uses: docker/build-push-action@v4
+      with:
+        context: ./backend
+        file: ./backend/Dockerfile
+        push: true
+        tags: apurva1025/portfolio-backend:${{ steps.set-tag.outputs.TAG }}
 
-  deploy:
-    needs: docker
+  k8s-deploy:
+    needs: docker-build-push
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/dev')
+    if: github.event_name == 'push'
     
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
     
-    - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: 1.0.0
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v3
     
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
-    
-    - name: Set environment
+    - name: Set environment namespace
       id: set-env
       run: |
-        if [ "${{ github.ref }}" = "refs/heads/dev" ]; then
-          echo "ENV=prod" >> $GITHUB_OUTPUT
+        if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+          echo "NAMESPACE=production" >> $GITHUB_OUTPUT
+          echo "TAG=latest" >> $GITHUB_OUTPUT
         else
-          echo "ENV=dev" >> $GITHUB_OUTPUT
+          echo "NAMESPACE=development" >> $GITHUB_OUTPUT
+          echo "TAG=dev" >> $GITHUB_OUTPUT
         fi
     
-    - name: Terraform Init
+    - name: Setup kubeconfig
       run: |
-        cd terraform
-        terraform init
+        mkdir -p ~/.kube
+        echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+        sed -i "s/server: https:\/\/127.0.0.1:6443/server: https:\/\/3.80.91.213:6443/g" ~/.kube/config
+        chmod 600 ~/.kube/config
+        cat ~/.kube/config
     
-    - name: Terraform Plan
+    - name: Create namespace if not exists
       run: |
-        cd terraform
-        terraform plan -var="environment=${{ steps.set-env.outputs.ENV }}"
+        kubectl create namespace ${{ steps.set-env.outputs.NAMESPACE }} --dry-run=client -o yaml | kubectl apply -f -
     
-    - name: Terraform Apply
+    - name: Deploy secrets
       run: |
-        cd terraform
-        terraform apply -auto-approve -var="environment=${{ steps.set-env.outputs.ENV }}"
+        cat kubernetes/manifests/secrets.yaml | \
+        sed "s|\${MONGODB_URI}|${{ secrets.MONGODB_URI }}|g" | \
+        sed "s|\${EMAIL_USER}|${{ secrets.EMAIL_USER }}|g" | \
+        sed "s|\${EMAIL_PASS}|${{ secrets.EMAIL_PASS }}|g" | \
+        sed "s|\${EMAIL_TO}|${{ secrets.EMAIL_TO }}|g" | \
+        kubectl apply -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
     
-    - name: Update Kubernetes deployment
+    - name: Deploy backend with correct tag
       run: |
-        aws eks update-kubeconfig --name portfolio-cluster --region us-east-1
-        sed -i "s|\${DOCKER_REGISTRY}|${{ secrets.DOCKERHUB_USERNAME }}|g" kubernetes/deployment.yaml
-        sed -i "s|\${IMAGE_TAG}|${{ github.sha }}|g" kubernetes/deployment.yaml
-        kubectl apply -f kubernetes/deployment.yaml
+        sed "s|image: apurvagargote/portfolio-backend:latest|image: apurva1025/portfolio-backend:${{ steps.set-env.outputs.TAG }}|g" kubernetes/manifests/backend-deployment.yaml | kubectl apply -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
+    
+    - name: Deploy frontend with correct tag
+      run: |
+        sed "s|image: apurvagargote/portfolio-frontend:latest|image: apurva1025/portfolio-frontend:${{ steps.set-env.outputs.TAG }}|g" kubernetes/manifests/frontend-deployment.yaml | kubectl apply -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
+    
+    - name: Deploy ingress
+      run: |
+        kubectl apply -f kubernetes/manifests/ingress.yaml -n ${{ steps.set-env.outputs.NAMESPACE }}
     
     - name: Verify deployment
       run: |
-        kubectl rollout status deployment/portfolio-app
+        kubectl get pods -n ${{ steps.set-env.outputs.NAMESPACE }}
+        kubectl get services -n ${{ steps.set-env.outputs.NAMESPACE }}
+        kubectl get ingress -n ${{ steps.set-env.outputs.NAMESPACE }}
