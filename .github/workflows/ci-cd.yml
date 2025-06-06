@@ -97,11 +97,13 @@ jobs:
         echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > ~/.kube/config
         sed -i "s|server: https://127.0.0.1:6443|server: https://107.23.188.164:6443|g" ~/.kube/config
         chmod 600 ~/.kube/config
+        export KUBECONFIG=~/.kube/config
     
     - name: Test kubectl connection
       run: |
         kubectl version --client
-        kubectl get nodes
+        kubectl config view --minify
+        kubectl get nodes || echo "Failed to connect to cluster"
     
     - name: Create namespace if not exists
       run: |

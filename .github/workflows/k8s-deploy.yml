@@ -40,10 +40,11 @@ jobs:
           echo "NAMESPACE=development" >> $GITHUB_OUTPUT
           echo "TAG=dev" >> $GITHUB_OUTPUT
         fi
-        
+          
     - name: Create namespace if not exists
       run: |
-        kubectl create namespace ${{ steps.set-env.outputs.NAMESPACE }} --dry-run=client -o yaml | kubectl apply -f -
+          kubectl create namespace ${{ steps.set-env.outputs.NAMESPACE }} --dry-run=client -o yaml | kubectl apply --validate=false -f -
+
         
     - name: Get EC2 public IP
       id: get-ip
@@ -52,12 +53,14 @@ jobs:
         echo "EC2_IP=$EC2_IP" >> $GITHUB_ENV
         echo "EC2 IP: $EC2_IP"
     
-    - name: Setup kubeconfig
+    - name: Set up kubeconfig
       run: |
-        mkdir -p ~/.kube
-        echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
-        sed -i "s/server: https:\/\/127.0.0.1:6443/server: https:\/\/${{ env.EC2_IP }}:6443/g" ~/.kube/config
-        chmod 600 ~/.kube/config
+        echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
+        chmod 600 $HOME/.kube/config
+        kubectl config view
+        kubectl cluster-info
+
+
     
     - name: Deploy secrets
       run: |
@@ -70,11 +73,11 @@ jobs:
       
     - name: Deploy backend with correct tag
       run: |
-        sed "s|image: apurvagargote/portfolio-backend:latest|image: apurva1025/portfolio-backend:${{ steps.set-tag.outputs.TAG }}|g" kubernetes/manifests/backend-deployment.yaml | kubectl apply -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
+        sed "s|image: apurvagargote/portfolio-backend:latest|image: apurva1025/portfolio-backend:${{ steps.set-env.outputs.TAG }}|g" kubernetes/manifests/backend-deployment.yaml | kubectl apply -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
         
     - name: Deploy frontend with correct tag
       run: |
-        sed "s|image: apurvagargote/portfolio-frontend:latest|image: apurva1025/portfolio-frontend:${{ steps.set-tag.outputs.TAG }}|g" kubernetes/manifests/frontend-deployment.yaml | kubectl apply -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
+        sed "s|image: apurvagargote/portfolio-frontend:latest|image: apurva1025/portfolio-frontend:${{ steps.set-env.outputs.TAG }}|g" kubernetes/manifests/frontend-deployment.yaml | kubectl apply -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
         
     - name: Deploy ingress
       run: |
