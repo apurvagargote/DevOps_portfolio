@@ -138,3 +138,5 @@ jobs:
         kubectl --kubeconfig=$HOME/.kube/config get pods -n ${{ steps.set-env.outputs.NAMESPACE }}
         kubectl --kubeconfig=$HOME/.kube/config get services -n ${{ steps.set-env.outputs.NAMESPACE }}
         kubectl --kubeconfig=$HOME/.kube/config get ingress -n ${{ steps.set-env.outputs.NAMESPACE }}
+
+        
