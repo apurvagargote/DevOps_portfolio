@@ -91,13 +91,15 @@ jobs:
           echo "TAG=dev" >> $GITHUB_OUTPUT
         fi
     
+    
     - name: Setup kubeconfig
       run: |
         mkdir -p ~/.kube
         echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > ~/.kube/config
         sed -i "s|server: https://127.0.0.1:6443|server: https://107.23.188.164:6443|g" ~/.kube/config
         chmod 600 ~/.kube/config
-        export KUBECONFIG=~/.kube/config
+        echo "KUBECONFIG=$HOME/.kube/config" >> $GITHUB_ENV
+
     
         
     - name: Test kubectl connection
