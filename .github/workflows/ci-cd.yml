@@ -94,7 +94,8 @@ jobs:
     - name: Setup kubeconfig
       run: |
         mkdir -p ~/.kube
-        echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+        echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > ~/.kube/config
+        sed -i "s|server: https://127.0.0.1:6443|server: https://107.23.188.164:6443|g" ~/.kube/config
         chmod 600 ~/.kube/config
     
     - name: Test kubectl connection
