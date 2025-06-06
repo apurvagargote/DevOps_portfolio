@@ -99,7 +99,6 @@ jobs:
       env:
        KUBECONFIG: ~/.kube/config
 
-
         
     - name: Test kubectl connection
       run: |
