@@ -99,6 +99,7 @@ jobs:
         chmod 600 ~/.kube/config
         export KUBECONFIG=~/.kube/config
     
+        
     - name: Test kubectl connection
       run: |
         kubectl version --client
