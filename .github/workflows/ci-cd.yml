@@ -91,26 +91,26 @@ jobs:
           echo "TAG=dev" >> $GITHUB_OUTPUT
         fi
     
-    
     - name: Setup kubeconfig
       run: |
-        mkdir -p ~/.kube
-        echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > ~/.kube/config
-        sed -i "s|server: https://127.0.0.1:6443|server: https://107.23.188.164:6443|g" ~/.kube/config
-        chmod 600 ~/.kube/config
+        echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > k3s-config.yaml
+        mkdir -p $HOME/.kube
+        cp k3s-config.yaml $HOME/.kube/config
+        chmod 600 $HOME/.kube/config
+        sed -i "s|server: https://127.0.0.1:6443|server: https://107.23.188.164:6443|g" $HOME/.kube/config
+        export KUBECONFIG=$HOME/.kube/config
         echo "KUBECONFIG=$HOME/.kube/config" >> $GITHUB_ENV
-
-    
         
     - name: Test kubectl connection
       run: |
+        kubectl config get-contexts
+        kubectl config current-context
         kubectl version --client
-        kubectl config view --minify
-        kubectl get nodes || echo "Failed to connect to cluster"
+        kubectl cluster-info || echo "Failed to connect to cluster"
     
     - name: Create namespace if not exists
       run: |
-        kubectl create namespace ${{ steps.set-env.outputs.NAMESPACE }} --dry-run=client -o yaml | kubectl apply -f -
+        kubectl --kubeconfig=$HOME/.kube/config create namespace ${{ steps.set-env.outputs.NAMESPACE }} --dry-run=client -o yaml | kubectl --kubeconfig=$HOME/.kube/config apply --validate=false -f -
     
     - name: Deploy secrets
       run: |
@@ -119,22 +119,22 @@ jobs:
         sed "s|\${EMAIL_USER}|${{ secrets.EMAIL_USER }}|g" | \
         sed "s|\${EMAIL_PASS}|${{ secrets.EMAIL_PASS }}|g" | \
         sed "s|\${EMAIL_TO}|${{ secrets.EMAIL_TO }}|g" | \
-        kubectl apply -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
+        kubectl --kubeconfig=$HOME/.kube/config apply --validate=false -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
     
     - name: Deploy backend with correct tag
       run: |
-        sed "s|image: apurvagargote/portfolio-backend:latest|image: apurva1025/portfolio-backend:${{ steps.set-env.outputs.TAG }}|g" kubernetes/manifests/backend-deployment.yaml | kubectl apply -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
+        sed "s|image: apurvagargote/portfolio-backend:latest|image: apurva1025/portfolio-backend:${{ steps.set-env.outputs.TAG }}|g" kubernetes/manifests/backend-deployment.yaml | kubectl --kubeconfig=$HOME/.kube/config apply --validate=false -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
     
     - name: Deploy frontend with correct tag
       run: |
-        sed "s|image: apurvagargote/portfolio-frontend:latest|image: apurva1025/portfolio-frontend:${{ steps.set-env.outputs.TAG }}|g" kubernetes/manifests/frontend-deployment.yaml | kubectl apply -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
+        sed "s|image: apurvagargote/portfolio-frontend:latest|image: apurva1025/portfolio-frontend:${{ steps.set-env.outputs.TAG }}|g" kubernetes/manifests/frontend-deployment.yaml | kubectl --kubeconfig=$HOME/.kube/config apply --validate=false -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
     
     - name: Deploy ingress
       run: |
-        kubectl apply -f kubernetes/manifests/ingress.yaml -n ${{ steps.set-env.outputs.NAMESPACE }}
+        kubectl --kubeconfig=$HOME/.kube/config apply --validate=false -f kubernetes/manifests/ingress.yaml -n ${{ steps.set-env.outputs.NAMESPACE }}
     
     - name: Verify deployment
       run: |
-        kubectl get pods -n ${{ steps.set-env.outputs.NAMESPACE }}
-        kubectl get services -n ${{ steps.set-env.outputs.NAMESPACE }}
-        kubectl get ingress -n ${{ steps.set-env.outputs.NAMESPACE }}
+        kubectl --kubeconfig=$HOME/.kube/config get pods -n ${{ steps.set-env.outputs.NAMESPACE }}
+        kubectl --kubeconfig=$HOME/.kube/config get services -n ${{ steps.set-env.outputs.NAMESPACE }}
+        kubectl --kubeconfig=$HOME/.kube/config get ingress -n ${{ steps.set-env.outputs.NAMESPACE }}
