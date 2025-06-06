@@ -63,3 +63,4 @@ Push to your main branch and GitHub Actions will:
 ## Monitoring
 
 Access Grafana dashboard at http://<ec2-public-ip>/grafana to view metrics from Prometheus.# trigger deployment
+# trigger deployment
