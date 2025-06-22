@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Frontend CI/CD Pipeline
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ dev, main ]
 
 jobs:
-  docker-build-push:
+  frontend-build:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     
@@ -15,21 +15,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     
-    - name: Create backend .env file
-      run: |
-        cat > backend/.env << EOF
-        MONGODB_URI=${{ secrets.MONGODB_URI }}
-        PORT=5000
-        EMAIL_USER=${{ secrets.EMAIL_USER }}
-        EMAIL_PASS=${{ secrets.EMAIL_PASS }}
-        EMAIL_TO=${{ secrets.EMAIL_TO }}
-        EOF
-    
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
       with:
        driver: docker
-
     
     - name: Login to DockerHub
       uses: docker/login-action@v2
@@ -42,10 +31,8 @@ jobs:
       run: |
         if [ "${{ github.ref }}" = "refs/heads/main" ]; then
           echo "TAG=latest" >> $GITHUB_OUTPUT
-          echo "NAMESPACE=production" >> $GITHUB_OUTPUT
         else
           echo "TAG=dev" >> $GITHUB_OUTPUT
-          echo "NAMESPACE=development" >> $GITHUB_OUTPUT
         fi
     
     - name: Build and push frontend
@@ -54,100 +41,5 @@ jobs:
         context: ./frontend
         file: ./frontend/Dockerfile
         push: true
-        tags: apurva1025/portfolio-frontend:${{ steps.set-tag.outputs.TAG }}
-    
-    - name: Build and push backend
-      uses: docker/build-push-action@v4
-      with:
-        context: ./backend
-        file: ./backend/Dockerfile
-        push: true
-        tags: apurva1025/portfolio-backend:${{ steps.set-tag.outputs.TAG }}
-
-  k8s-deploy:
-    needs: docker-build-push
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    
-    - name: Install kubectl
-      run: |
-        curl -LO "https://dl.k8s.io/release/stable.txt"
-        curl -LO "https://dl.k8s.io/release/$(cat stable.txt)/bin/linux/amd64/kubectl"
-        chmod +x kubectl
-        sudo mv kubectl /usr/local/bin/
-    
-    - name: Set environment namespace
-      id: set-env
-      run: |
-        if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-          echo "NAMESPACE=production" >> $GITHUB_OUTPUT
-          echo "TAG=latest" >> $GITHUB_OUTPUT
-        else
-          echo "NAMESPACE=development" >> $GITHUB_OUTPUT
-          echo "TAG=dev" >> $GITHUB_OUTPUT
-        fi
-    
-    - name: Setup kubeconfig
-      run: |
-        mkdir -p ~/.kube
-        echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > ~/.kube/config
-        chmod 600 ~/.kube/config
-      env:
-       KUBECONFIG: ~/.kube/config
-
-        
-    - name: Test kubectl connection
-      run: |
-        kubectl config get-contexts
-        kubectl config current-context
-        kubectl version --client
-        kubectl cluster-info || echo "Failed to connect to cluster"
-    
-    - name: Create namespace if not exists
-      run: |
-         kubectl create namespace ${{ steps.set-env.outputs.NAMESPACE }} --dry-run=client -o yaml | kubectl apply --validate=false -f -
-      env:
-       KUBECONFIG: ~/.kube/config
-
-    
-    - name: Deploy secrets
-      run: |
-        cat kubernetes/manifests/secrets.yaml | \
-        sed "s|\${MONGODB_URI}|${{ secrets.MONGODB_URI }}|g" | \
-        sed "s|\${EMAIL_USER}|${{ secrets.EMAIL_USER }}|g" | \
-        sed "s|\${EMAIL_PASS}|${{ secrets.EMAIL_PASS }}|g" | \
-        sed "s|\${EMAIL_TO}|${{ secrets.EMAIL_TO }}|g" | \
-        kubectl --kubeconfig=$HOME/.kube/config apply --validate=false -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
-      env:
-       KUBECONFIG: ~/.kube/config  
-    
-    - name: Deploy backend with correct tag
-      run: |
-        sed "s|image: apurvagargote/portfolio-backend:latest|image: apurva1025/portfolio-backend:${{ steps.set-env.outputs.TAG }}|g" kubernetes/manifests/backend-deployment.yaml | kubectl --kubeconfig=$HOME/.kube/config apply --validate=false -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
-      env:
-       KUBECONFIG: ~/.kube/config  
-
-    - name: Deploy frontend with correct tag
-      run: |
-        sed "s|image: apurvagargote/portfolio-frontend:latest|image: apurva1025/portfolio-frontend:${{ steps.set-env.outputs.TAG }}|g" kubernetes/manifests/frontend-deployment.yaml | kubectl --kubeconfig=$HOME/.kube/config apply --validate=false -f - -n ${{ steps.set-env.outputs.NAMESPACE }}
-      env:
-       KUBECONFIG: ~/.kube/config  
-
-    - name: Deploy ingress
-      run: |
-        kubectl --kubeconfig=$HOME/.kube/config apply --validate=false -f kubernetes/manifests/ingress.yaml -n ${{ steps.set-env.outputs.NAMESPACE }}
-      env:
-       KUBECONFIG: ~/.kube/config  
-
-    - name: Verify deployment
-      run: |
-        kubectl --kubeconfig=$HOME/.kube/config get pods -n ${{ steps.set-env.outputs.NAMESPACE }}
-        kubectl --kubeconfig=$HOME/.kube/config get services -n ${{ steps.set-env.outputs.NAMESPACE }}
-        kubectl --kubeconfig=$HOME/.kube/config get ingress -n ${{ steps.set-env.outputs.NAMESPACE }}\
-      env:
-       KUBECONFIG: ~/.kube/config   
+        tags: apurva1025/portfolio-frontend:${{ steps.set-tag.outputs.TAG }}   
 
