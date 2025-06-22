@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/DevOps_portfolio/static/css/main.ceed3aaf.css",
+    "main.js": "/DevOps_portfolio/static/js/main.c5c0dd97.js",
+    "static/js/453.c2e8e339.chunk.js": "/DevOps_portfolio/static/js/453.c2e8e339.chunk.js",
+    "static/media/profile-photo.jpg": "/DevOps_portfolio/static/media/profile-photo.2cfd44172f462152257a.jpg",
+    "index.html": "/DevOps_portfolio/index.html",
+    "main.ceed3aaf.css.map": "/DevOps_portfolio/static/css/main.ceed3aaf.css.map",
+    "main.c5c0dd97.js.map": "/DevOps_portfolio/static/js/main.c5c0dd97.js.map",
+    "453.c2e8e339.chunk.js.map": "/DevOps_portfolio/static/js/453.c2e8e339.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ceed3aaf.css",
+    "static/js/main.c5c0dd97.js"
+  ]
+}
