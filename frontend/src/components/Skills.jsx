@@ -55,17 +55,14 @@ const Skills = () => {
     {
       title: "Cloud Platforms",
       skills: [
-        { name: "AWS", icon: <FaAws className="skill-icon text-warning" /> },
-        { name: "Azure", icon: <FaNetworkWired className="skill-icon text-primary" /> },
-        { name: "GCP", icon: <FaNetworkWired className="skill-icon text-success" /> }
+        { name: "AWS", icon: <FaAws className="skill-icon text-warning" /> }
       ]
     },
     {
       title: "Monitoring & Logging",
       skills: [
         { name: "Prometheus", icon: <SiPrometheus className="skill-icon text-danger" /> },
-        { name: "Grafana", icon: <SiGrafana className="skill-icon text-warning" /> },
-        { name: "ELK Stack", icon: <FaTerminal className="skill-icon text-success" /> }
+        { name: "Grafana", icon: <SiGrafana className="skill-icon text-warning" /> }
       ]
     },
     {
@@ -79,7 +76,6 @@ const Skills = () => {
     {
       title: "Security",
       skills: [
-        { name: "SAST/DAST", icon: <FaLock className="skill-icon text-danger" /> },
         { name: "Secret Management", icon: <FaLock className="skill-icon text-warning" /> },
         { name: "IAM", icon: <FaLock className="skill-icon text-info" /> }
       ]
