@@ -2,8 +2,8 @@ import React, { useContext, useEffect } from 'react';
 import { Container, Row, Col, Button, Image } from 'react-bootstrap';
 import styled from 'styled-components';
 import { ThemeContext } from '../context/ThemeContext';
-import { FaJenkins, FaDocker, FaAws } from 'react-icons/fa';
-import { SiTerraform, SiKubernetes } from 'react-icons/si';
+import { FaJenkins, FaDocker } from 'react-icons/fa';
+import { SiTerraform } from 'react-icons/si';
 import profilePhoto from '../assets/profile-photo.jpg'; // Add your photo to assets folder
 
 

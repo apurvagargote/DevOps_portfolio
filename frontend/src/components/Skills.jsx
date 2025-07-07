@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { 
   FaJenkins, FaGithub, FaDocker, FaAws, 
-  FaNetworkWired, FaTerminal, FaCode, FaLock 
+  FaTerminal, FaCode, FaLock 
 } from 'react-icons/fa';
 import { SiKubernetes, SiTerraform, SiAnsible, SiPrometheus, SiGrafana } from 'react-icons/si';
 
