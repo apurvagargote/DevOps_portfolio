@@ -35,9 +35,25 @@ const Header = () => {
   const [expanded, setExpanded] = useState(false);
   const navbarRef = useRef(null);
   useEffect(() => {
-    // Close navbar when clicking a navigation link
-    const handleNavClick = () => {
-      setExpanded(false);
+    // Handle navigation clicks with proper scrolling
+    const handleNavClick = (e) => {
+      const href = e.target.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        e.preventDefault();
+        const targetId = href.substring(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+          const navbarHeight = document.querySelector('.navbar').offsetHeight;
+          const targetPosition = targetElement.offsetTop - navbarHeight - 20;
+          
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }
+      // Don't close navbar immediately, let the outside click handler do it
     };
     
     const navLinks = document.querySelectorAll('.nav-link');
@@ -136,12 +152,12 @@ const Header = () => {
         </div>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto" as="ul">
-            <Nav.Item as="li"><Nav.Link href="#home" onClick={() => setExpanded(false)}>Home</Nav.Link></Nav.Item>
-            <Nav.Item as="li"><Nav.Link href="#about" onClick={() => setExpanded(false)}>About</Nav.Link></Nav.Item>
-            <Nav.Item as="li"><Nav.Link href="#skills" onClick={() => setExpanded(false)}>Skills</Nav.Link></Nav.Item>
-            <Nav.Item as="li"><Nav.Link href="#projects" onClick={() => setExpanded(false)}>Projects</Nav.Link></Nav.Item>
-            <Nav.Item as="li"><Nav.Link href="#resume" onClick={() => setExpanded(false)}>Resume</Nav.Link></Nav.Item>
-            <Nav.Item as="li"><Nav.Link href="#contact" onClick={() => setExpanded(false)}>Contact</Nav.Link></Nav.Item>
+            <Nav.Item as="li"><Nav.Link href="#home">Home</Nav.Link></Nav.Item>
+            <Nav.Item as="li"><Nav.Link href="#about">About</Nav.Link></Nav.Item>
+            <Nav.Item as="li"><Nav.Link href="#skills">Skills</Nav.Link></Nav.Item>
+            <Nav.Item as="li"><Nav.Link href="#projects">Projects</Nav.Link></Nav.Item>
+            <Nav.Item as="li"><Nav.Link href="#resume">Resume</Nav.Link></Nav.Item>
+            <Nav.Item as="li"><Nav.Link href="#contact">Contact</Nav.Link></Nav.Item>
             <Nav.Item as="li">
               <ThemeToggleWrapper className="d-none d-lg-flex">
                 <ThemeToggle />

@@ -72,6 +72,13 @@ section[id] {
   scroll-margin-top: 70px;
 }
 
+/* Adjust scroll margin for mobile when navbar is collapsed */
+@media (max-width: 991.98px) {
+  section[id] {
+    scroll-margin-top: 56px;
+  }
+}
+
 /* Add some spacing between sections */
 #home, #about, #skills, #projects, #contact {
   position: relative;
