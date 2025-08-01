@@ -2,6 +2,8 @@
 
 A modern, responsive portfolio website showcasing DevOps skills and projects, built with React and deployed using GitHub Pages with automated CI/CD.
 
+![Homepage Screenshot](frontend/src/assets/homepage.png)
+
 ## 🌐 Live Demo
 
 **[View Portfolio](https://apurvagargote.github.io/DevOps_portfolio/)**
@@ -203,13 +205,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Email: apurvagargote@gmail.com
 - LinkedIn: [linkedin.com/in/apurvagargote](https://linkedin.com/in/apurvagargote)
 - GitHub: [github.com/apurvagargote](https://github.com/apurvagargote)
-
-## 🙏 Acknowledgments
-
-- React Bootstrap for UI components
-- React Icons for iconography
-- GitHub Pages for free hosting
-- Styled Components for CSS-in-JS
 
 ---
 
