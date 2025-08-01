@@ -43,6 +43,8 @@ const SkillIconContainer = styled.div`
   }
 `;
 
+
+
 const Home = () => {
   const { isDarkMode } = useContext(ThemeContext);
 
@@ -89,7 +91,7 @@ const Home = () => {
                   Contact Me
                 </Button>
                 <Button href="#resume" variant={isDarkMode ? "outline-light" : "outline-dark"} size="lg" className="cta-button">
-                  Download Resume
+                  View Resume
                 </Button>
               </div>
             </Col>

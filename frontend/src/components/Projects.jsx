@@ -11,7 +11,7 @@ const Projects = () => {
       image: "project1.jpg",
       tags: ["Kubernetes", "Flask", "Python", "Containerd"],
       github: "https://github.com/apurvagargote/Cloud-native-monitoring-app",
-      demo: "https://architecture-diagram-url.com",
+      // demo: "https://architecture-diagram-url.com",
       outcomes: "Deployed on Kubernetes (KIND) using Containerd; improved setup efficiency by 40% and Optimized system responsiveness to 300ms under 100+ concurrent test requests."
     },
     {
@@ -20,7 +20,7 @@ const Projects = () => {
       image: "project2.jpg",
       tags: ["Node.js", "Jenkins", "Docker", " AWS EC2", " GitHub Webhooks"],
       github: "https://github.com/apurvagargote/Node-todo-cicd",
-      demo: "https://architecture-diagram-url.com",
+      // demo: "https://architecture-diagram-url.com",
       outcomes: "Reduced deployment time by 53% (15min → 7min); maintained 95% build success rate and  Enabled zero-downtime releases using Docker and Nginx reverse proxy on AWS EC2."
     },
     {
@@ -29,7 +29,7 @@ const Projects = () => {
       image: "project3.jpg",
       tags: ["Flask", "MySQL", "Kubernetes", "Containerd", "AWS"],
       github: "https://github.com/apurvagargote/two-tier-flask-app",
-      demo: "https://architecture-diagram-url.com",
+      // demo: "https://architecture-diagram-url.com",
       outcomes: " Configured 3 services, 2 PVCs, and horizontal pod autoscaling for scalability and Ensured 99.9% uptime through resilient deployment and AWS-based network security."
     }
   ];
@@ -65,9 +65,9 @@ const Projects = () => {
                   <Button variant="outline-dark" href={project.github} target="_blank" rel="noopener noreferrer">
                     <FaGithub className="me-2" /> GitHub
                   </Button>
-                  <Button variant="outline-primary" href={project.demo} target="_blank" rel="noopener noreferrer">
+                  {/* <Button variant="outline-primary" href={project.demo} target="_blank" rel="noopener noreferrer">
                     <FaExternalLinkAlt className="me-2" /> Architecture
-                  </Button>
+                  </Button> */}
                 </div>
               </Card.Footer>
             </Card>
