@@ -4,21 +4,22 @@ import { FaDownload } from 'react-icons/fa';
 import styled from 'styled-components';
 
 const ResumeContainer = styled(Container)`
-  min-height: auto;
-  padding-bottom: 2rem;
+  min-height: 100vh;
+  padding: 4rem 0;
 `;
 
 const PDFFrame = styled.iframe`
   width: 100%;
-  height: 600px;
+  height: 800px;
   border: 1px solid var(--border-color);
+  border-radius: 8px;
   
   @media (max-width: 768px) {
-    height: 400px;
+    height: 600px;
   }
   
   @media (max-width: 576px) {
-    height: 300px;
+    height: 500px;
   }
 `;
 

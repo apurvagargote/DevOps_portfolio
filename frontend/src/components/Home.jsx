@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { Container, Row, Col, Button, Image } from 'react-bootstrap';
 import styled from 'styled-components';
 import { ThemeContext } from '../context/ThemeContext';
-import { FaJenkins, FaDocker } from 'react-icons/fa';
+import { FaJenkins, FaDocker, FaAws, FaChartLine } from 'react-icons/fa';
 import { SiTerraform } from 'react-icons/si';
 import profilePhoto from '../assets/profile-photo.jpg'; // Add your photo to assets folder
 
@@ -143,6 +143,26 @@ const Home = () => {
               </SkillIconContainer>
               <h3>Containerization</h3>
               <p>Docker and Kubernetes for container orchestration and microservices architecture.</p>
+            </div>
+          </Col>
+        </Row>
+        <Row className="justify-content-center">
+          <Col md={4} className="mb-4 reveal">
+            <div className="text-center card-3d">
+              <SkillIconContainer>
+                <FaAws />
+              </SkillIconContainer>
+              <h3>Cloud & AWS</h3>
+              <p>Hands-on experience with AWS services like EC2, S3, IAM, RDS, and ECS for cloud-based deployments.</p>
+            </div>
+          </Col>
+          <Col md={4} className="mb-4 reveal">
+            <div className="text-center card-3d">
+              <SkillIconContainer>
+                <FaChartLine />
+              </SkillIconContainer>
+              <h3>Monitoring & Logging</h3>
+              <p>Using tools like Prometheus, Grafana, and AWS CloudWatch to monitor system performance and troubleshoot issues effectively.</p>
             </div>
           </Col>
         </Row>
