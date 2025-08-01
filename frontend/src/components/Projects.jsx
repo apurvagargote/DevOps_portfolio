@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
-import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaGithub} from 'react-icons/fa';
 
 
 const Projects = () => {
