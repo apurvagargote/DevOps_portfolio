@@ -79,8 +79,8 @@ const Home = () => {
             </Col>
             <Col lg={8} className="text-center text-lg-start">
               <h1 className="display-4 fw-bold mb-4 gradient-text">
-                <span className="hero-header">Hey there, I'm</span>
-                <PurpleSpan className="hero-name"> Apurva 👋</PurpleSpan>
+                <span className="hero-header">Hey there, I'm</span><br/>
+                <PurpleSpan className="hero-name">Apurva 👋</PurpleSpan>
               </h1>
               <div className="lead mb-5 typing-animation">
                 <p>I'm a passionate DevOps enthusiast and aspiring Cloud Engineer with hands-on experience in building and deploying full-stack applications using tools like Docker, Jenkins, AWS, and Kubernetes.</p>
