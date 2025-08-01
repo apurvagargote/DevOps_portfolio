@@ -79,6 +79,28 @@ section[id] {
   }
 }
 
+/* Mobile responsiveness fixes */
+@media (max-width: 575px) {
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  
+  .cta-button {
+    margin: 5px;
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  
+  .display-4 {
+    font-size: 2rem !important;
+  }
+  
+  .lead {
+    font-size: 1rem;
+  }
+}
+
 /* Add some spacing between sections */
 #home, #about, #skills, #projects, #contact {
   position: relative;

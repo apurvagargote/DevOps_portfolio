@@ -15,6 +15,10 @@ const HeroSection = styled.div`
   transition: background 0.3s ease, color 0.3s ease;
   position: relative;
   overflow: hidden;
+  
+  @media (max-width: 575px) {
+    padding: 80px 0;
+  }
 `;
 
 const ProfileImage = styled(Image)`
@@ -29,6 +33,11 @@ const ProfileImage = styled(Image)`
   &:hover {
     transform: scale(1.05);
     box-shadow: 0 0 30px var(--accent-color);
+  }
+  
+  @media (max-width: 575px) {
+    width: 150px;
+    height: 150px;
   }
 `;
 
@@ -75,7 +84,7 @@ const Home = () => {
         <Container>
           <Row className="align-items-center">
             <Col lg={4} className="text-center mb-4 mb-lg-0">
-              <ProfileImage src={profilePhoto} alt="Profile" fluid />
+              <ProfileImage src={profilePhoto} alt="Profile" fluid loading="lazy" />
             </Col>
             <Col lg={8} className="text-center text-lg-start">
               <h1 className="display-4 fw-bold mb-4 gradient-text">

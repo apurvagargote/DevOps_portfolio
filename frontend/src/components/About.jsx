@@ -35,11 +35,6 @@ const About = () => {
                 I document my learning journey and insights on <a href="https://apurva-g.hashnode.dev/" target="_blank" rel="noopener noreferrer"><u>Hashnode</u></a>, sharing practical solutions and challenges encountered in the DevOps space.
               </p>
 
-              <h4 className="mt-4">Career Goals</h4>
-              <p>
-                My ambition is to become a skilled DevOps Engineer who builds reliable, automated systems that enable seamless continuous delivery. I also aim to mentor others and contribute to open-source projects as I advance in my career.
-              </p>
-
               <h4 className="mt-4">Interests</h4>
               <p>
                 Beyond work, I enjoy exploring emerging technologies, engaging with tech communities, and staying abreast of trends in cloud-native development, system design, and infrastructure automation.
