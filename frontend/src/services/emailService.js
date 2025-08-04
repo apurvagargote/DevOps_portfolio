@@ -15,7 +15,6 @@ export const sendEmail = async (formData) => {
     if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
       throw new Error('EmailJS configuration missing');
     }
-
     const result = await emailjs.send(
       SERVICE_ID,
       TEMPLATE_ID,
