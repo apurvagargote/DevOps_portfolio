@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Card, Alert } from 'react-bootstrap';
 import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
+import { sendEmail } from '../services/emailService';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -25,13 +26,20 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Always show success message
-    setAlertVariant('success');
-    setAlertMessage('Message Sent!');
-    setFormData({ name: '', email: '', message: '' });
+    const result = await sendEmail(formData);
+    
+    if (result.success) {
+      setAlertVariant('success');
+      setAlertMessage('Message sent successfully!');
+      setFormData({ name: '', email: '', message: '' });
+    } else {
+      setAlertVariant('danger');
+      setAlertMessage('Failed to send message. Please try again.');
+    }
+    
     setIsSubmitting(false);
     setShowAlert(true);
-    setTimeout(() => setShowAlert(false), 3000);
+    setTimeout(() => setShowAlert(false), 5000);
   };
 
   return (
