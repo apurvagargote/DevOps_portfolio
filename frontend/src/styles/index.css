@@ -108,7 +108,7 @@ section[id] {
 
 #resume {
   position: relative;
-  min-height: auto !important;
+  padding-top: 0 !important;
 }
 .navbar-glass {
   backdrop-filter: blur(10px);

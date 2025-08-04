@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 const ResumeContainer = styled(Container)`
   min-height: 100vh;
-  padding: 4rem 0;
+  padding: 0;
 `;
 
 const PDFFrame = styled.iframe`
