@@ -20,10 +20,10 @@ export const sendEmail = async (formData) => {
       SERVICE_ID,
       TEMPLATE_ID,
       {
-        from_name: formData.name,
-        from_email: formData.email,
+        name: formData.name,
+        email: formData.email,
         message: formData.message,
-        to_email: 'apurvagargote@gmail.com'
+        time: new Date().toLocaleString()
       }
     );
     return { success: true, result };
