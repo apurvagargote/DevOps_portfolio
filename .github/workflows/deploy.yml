@@ -31,6 +31,12 @@ jobs:
       run: npm ci
       working-directory: ./frontend
     
+    - name: Debug secrets
+      run: |
+        echo "SERVICE_ID exists: ${{ secrets.EMAILJS_SERVICE_ID != '' }}"
+        echo "TEMPLATE_ID exists: ${{ secrets.EMAILJS_TEMPLATE_ID != '' }}"
+        echo "PUBLIC_KEY exists: ${{ secrets.EMAILJS_PUBLIC_KEY != '' }}"
+    
     - name: Build
       run: npm run build
       working-directory: ./frontend
