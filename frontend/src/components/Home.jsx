@@ -21,24 +21,49 @@ const HeroSection = styled.div`
   }
 `;
 
-const ProfileImage = styled(Image)`
-  width: 200px;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 4px solid var(--accent-color);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
+const PolaroidFrame = styled.div`
+  position: relative;
+  width: 260px;
+  height: 320px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 20px 20px 60px 20px;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transform: rotate(-3deg);
+  transition: all 0.3s ease;
+  
+  &::after {
+    content: 'Apurva Gargote';
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: var(--text-color);
+    text-align: center;
+  }
   
   &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 30px var(--accent-color);
+    transform: rotate(0deg) translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   }
   
   @media (max-width: 575px) {
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 260px;
+    padding: 15px 15px 45px 15px;
   }
+`;
+
+const ProfileImage = styled(Image)`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
 `;
 
 const SkillIconContainer = styled.div`
@@ -84,7 +109,9 @@ const Home = () => {
         <Container>
           <Row className="align-items-center">
             <Col lg={4} className="text-center mb-4 mb-lg-0">
-              <ProfileImage src={profilePhoto} alt="Profile" fluid loading="lazy" />
+              <PolaroidFrame>
+                <ProfileImage src={profilePhoto} alt="Profile" fluid loading="lazy" />
+              </PolaroidFrame>
             </Col>
             <Col lg={8} className="text-center text-lg-start">
               <h1 className="display-4 fw-bold mb-4 gradient-text">
