@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Badge, Carousel } from 'react-bootstrap';
-import { FaGithub, FaExternalLinkAlt, FaCode, FaRocket } from 'react-icons/fa';
+import { FaGithub, FaCode, FaRocket } from 'react-icons/fa';
 import styled from 'styled-components';
 import { ThemeContext } from '../context/ThemeContext';
 
