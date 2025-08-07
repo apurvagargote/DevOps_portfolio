@@ -40,6 +40,15 @@ const Header = () => {
       const href = e.target.getAttribute('href');
       if (href && href.startsWith('#')) {
         e.preventDefault();
+        
+        // Clear all active states first
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.classList.remove('active');
+        });
+        
+        // Add active to clicked link
+        e.target.classList.add('active');
+        
         const targetId = href.substring(1);
         const targetElement = document.getElementById(targetId);
         
@@ -52,8 +61,10 @@ const Header = () => {
             behavior: 'smooth'
           });
         }
+        
+        // Close navbar on mobile after click
+        setExpanded(false);
       }
-      // Don't close navbar immediately, let the outside click handler do it
     };
     
     const navLinks = document.querySelectorAll('.nav-link');
@@ -72,20 +83,29 @@ const Header = () => {
   useEffect(() => {
     const handleScroll = () => {
       const sections = document.querySelectorAll('section[id]');
-      const scrollPosition = window.pageYOffset + 100; // Offset for better detection
+      const scrollPosition = window.pageYOffset + 100;
+      let activeSection = null;
       
+      // Find the current active section
       sections.forEach(section => {
         const sectionTop = section.offsetTop;
         const sectionHeight = section.offsetHeight;
-        const sectionId = section.getAttribute('id');
-        const navLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
         
         if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-          navLink?.classList.add('active');
-        } else {
-          navLink?.classList.remove('active');
+          activeSection = section.getAttribute('id');
         }
       });
+      
+      // Clear all active states
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      
+      // Set active state only for current section
+      if (activeSection) {
+        const activeNavLink = document.querySelector(`.nav-link[href="#${activeSection}"]`);
+        activeNavLink?.classList.add('active');
+      }
     };
     
     window.addEventListener('scroll', handleScroll);

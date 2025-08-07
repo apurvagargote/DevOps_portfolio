@@ -54,8 +54,13 @@ const PolaroidFrame = styled.div`
   
   @media (max-width: 575px) {
     width: 200px;
-    height: 260px;
-    padding: 15px 15px 45px 15px;
+    height: 280px;
+    padding: 15px 15px 55px 15px;
+    
+    &::after {
+      bottom: 18px;
+      font-size: 12px;
+    }
   }
 `;
 
