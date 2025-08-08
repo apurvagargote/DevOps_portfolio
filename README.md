@@ -2,7 +2,7 @@
 
 A modern, responsive portfolio website showcasing DevOps skills and projects, built with React and deployed using GitHub Pages with automated CI/CD.
 
-![Homepage Screenshot](homepage.png)
+![Homepage Screenshot](HomePage.png)
 
 ## 🌐 Live Demo
 
